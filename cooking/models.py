@@ -10,6 +10,7 @@ class Lote(models.Model):
             primary_key=True, null=False)
     observaciones = models.TextField(max_length=200,
             help_text="Comentarios,datos o informacion relevante a un lote determinado", null=True, blank=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):

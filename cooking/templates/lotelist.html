@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
+
+{% block content %}
+      <h2>Lista de lotes</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th>Lote Nro:</th>
+              <th>Fecha Agregado:</th>
+              <th>Observaciones:</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% if lotes %}
+            {% for lote in lotes %}
+            <tr>
+                <td>{{ lote.lote_nro }}</td>
+                <td>{{ lote.fecha_creacion }}</td>
+                <td>{{ lote.observaciones }}</td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+          </tbody>
+        </table>
+      </div>
+{% endblock %}
