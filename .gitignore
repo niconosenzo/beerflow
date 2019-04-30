@@ -57,6 +57,9 @@ local_settings.py
 db.sqlite3
 migrations/
 beerflow/settings.py
+.gitignore
+manage.py
+
 # Flask stuff:
 instance/
 .webassets-cache
