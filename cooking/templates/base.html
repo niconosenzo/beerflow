@@ -55,12 +55,14 @@
             </a>
           </li>
         </ul>
+        {% block infolote %}{% endblock %}
 
       </div>
     </nav>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
         {% block content %}{% endblock %}
+        {% block pagination %}{% endblock %}
 
     </main>
   </div>

@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Lote, ProcesoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, Adicion
+from .models import Lote, SeguimientoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, Adicion, SeguimientoFermentacionClarificacion, SeguimientoCarbonatacion
 
 admin.site.register(Lote)
-admin.site.register(ProcesoMaceracionCoccion)
+admin.site.register(SeguimientoMaceracionCoccion)
 admin.site.register(Maceracion)
 admin.site.register(Correccion)
 admin.site.register(OllaMaceracion)
@@ -11,5 +11,7 @@ admin.site.register(EtapaOllaAguaCaliente)
 admin.site.register(Coccion)
 admin.site.register(EtapaCoccion)
 admin.site.register(Adicion)
+admin.site.register(SeguimientoFermentacionClarificacion)
+admin.site.register(SeguimientoCarbonatacion)
 
 # Register your models here.

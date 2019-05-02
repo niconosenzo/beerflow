@@ -17,7 +17,7 @@
           {% if lotes %}
             {% for lote in lotes %}
             <tr>
-                <td>{{ lote.lote_nro }}</td>
+                <td><a href="{% url 'lote_seguimientos_list' lote.lote_nro %}">{{ lote.lote_nro }}</td>
                 <td>{{ lote.fecha_creacion }}</td>
                 <td>{{ lote.observaciones }}</td>
             </tr>
@@ -27,3 +27,21 @@
         </table>
       </div>
 {% endblock %}
+{% block pagination %}
+  {% if is_paginated %}
+      <div class="pagination">
+          <span class="page-links">
+              {% if page_obj.has_previous %}
+                  <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previa</a>
+              {% endif %}
+              <span class="page-current">
+                  Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+              </span>
+              {% if page_obj.has_next %}
+                  <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">siguiente</a>
+              {% endif %}
+          </span>
+      </div>
+  {% endif %}
+{% endblock %}
+

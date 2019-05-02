@@ -8,23 +8,26 @@ class Lote(models.Model):
     """
     lote_nro = models.PositiveIntegerField(help_text="ID lote, debe ser unico",
             primary_key=True, null=False)
-    observaciones = models.TextField(max_length=200,
+    observaciones = models.TextField(max_length=100,
             help_text="Comentarios,datos o informacion relevante a un lote determinado", null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    # listamos los lotes con el mas reciente primero
+    class Meta:
+        ordering = ["-fecha_creacion"]
 
 
     def __str__(self):
         return str(self.lote_nro)
 
 
-class ProcesoMaceracionCoccion(models.Model):
+class SeguimientoMaceracionCoccion(models.Model):
     """
     Primer proceso de la elaboración, se distingue todo el proceso por un ID unico, el lote_nro
     """
     lote = models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
     fecha_inicio = models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido")
     fecha_fin = models.DateField(null=True, blank=True)
-    observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante al proceso de coccion para un lote determinado", null=True, blank=True)
+    observaciones = models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante para un lote determinado", null=True, blank=True)
     #coccion = models.ForeignKey('Coccion', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
@@ -39,16 +42,14 @@ class Maceracion(models.Model):
         (2, 2),
     )
     batch_nro = models.PositiveIntegerField(choices=NRO_BATCH, help_text="nro de batch correspondiente, puede ser 1 o 2")
-    proceso_maceracion_coccion = models.ForeignKey('ProcesoMaceracionCoccion', on_delete=models.CASCADE, null=True)
+    seguimiento_maceracion_coccion = models.ForeignKey('SeguimientoMaceracionCoccion', on_delete=models.CASCADE, null=True)
     densidad_finalizacion_maceracion = models.FloatField(null=True, blank=True)
     densidad_finalizacion_lavado = models.FloatField(null=True, blank=True)
-    observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante a la etapa de maceracion", null=True, blank=True)
-    #correccion = models.ForeignKey('Correccion', on_delete=models.CASCADE, null=True, blank=True)
-    #olla_maceracion = models.ForeignKey('OllaMaceracion', on_delete=models.CASCADE, null=True, blank=True)
-    #olla_agua_caliente = models.ForeignKey('OllaAguaCaliente', on_delete=models.CASCADE, null=True, blank=True)
+    observaciones = models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante a la etapa de maceracion", null=True, blank=True)
+
 
 class Correccion(models.Model):
-    """
+    """ 
     Registro de correccion del PH para una etapa de maceracion/batch determinada
     """
     maceracion = models.ForeignKey('Maceracion', on_delete=models.CASCADE, null=True)
@@ -100,15 +101,15 @@ class Coccion(models.Model):
     """
     Etapa general de maceracion, puede ser batch_nro 1 o 2
     """
-    proceso_maceracion_coccion = models.ForeignKey('ProcesoMaceracionCoccion', on_delete=models.CASCADE, null=True)
+    proceso_maceracion_coccion = models.ForeignKey('SeguimientoMaceracionCoccion', on_delete=models.CASCADE, null=True)
     NRO_BATCH = (
         (1, 1),
         (2, 2),
     )
     batch_nro = models.PositiveIntegerField(choices=NRO_BATCH, help_text="nro de batch correspondiente, puede ser 1 o 2")
-    densidad_finalizacion_hervor= models.FloatField(null=True, blank=True)
+    densidad_finalizacion_hervor = models.FloatField(null=True, blank=True)
     hora_fin_trasiego = models.CharField(max_length=50, help_text="hora inicio", null=True, blank=True)
-    observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante a la etapa de coccion", null=True, blank=True)
+    observaciones = models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante a la etapa de coccion", null=True, blank=True)
 
 
 class EtapaCoccion(models.Model):
@@ -135,3 +136,30 @@ class Adicion(models.Model):
     tipo = models.CharField(max_length=50, help_text="Tipo de adicion")
     gramos = models.PositiveIntegerField(null=True, blank=True, help_text='Cantidad expresada en gramos')
     hora_adicion = models.CharField(max_length=50, help_text="hora de adicion", null=True, blank=True)
+
+
+class SeguimientoFermentacionClarificacion(models.Model):
+    """
+    Segundo proceso de la elaboración, se distingue todo el proceso por un ID unico, el lote_nro
+    """
+    lote = models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
+#    fecha_inicio = models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido")
+#    fecha_fin = models.DateField(null=True, blank=True)
+#    observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante al proceso de coccion para un lote determinado", null=True, blank=True)
+    observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante al seguimiento de fermentacion para un lote determinado", null=True, blank=True)
+
+
+    def __str__(self):
+        return str(self.lote.lote_nro)
+
+class SeguimientoCarbonatacion(models.Model):
+    """
+    Tercer seguimiento de la elaboración, se distingue todo el suiemiento por un ID unico, el lote_nro
+    """
+    lote = models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
+    observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante al seguimiento de carbonatacion para un lote determinado", null=True, blank=True)
+
+    def __str__(self):
+        return str(self.lote.lote_nro)
+
+
