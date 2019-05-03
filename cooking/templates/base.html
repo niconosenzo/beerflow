@@ -31,29 +31,35 @@
   <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url 'index' %}">Schuam</a>
   <input class="form-control form-control-dark w-100" type="text" placeholder="Buscar Lote" aria-label="Search">
   <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">Sign out</a>
-    </li>
+       {% if user.is_authenticated %}
+          <!--  <a>User: {{ user.get_username }}</a> -->
+
+           <li class="nav-item text-nowrap"><a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Salir</a></li>
+      {% endif %}
   </ul>
 </nav>
-
 <div class="container-fluid">
   <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+     <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
       <div class="sidebar-sticky">
-        <ul class="nav flex-column">
+          <ul class="nav flex-column"> 
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'lotelist' %}">
+            <a class="nav-link" href="{% url 'lotelist' %}" style="color:white">
               <span data-feather="codepen"></span>
               Lotes <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="#"  style="color:white">
               <span data-feather="box"></span>
               Barriles
             </a>
-          </li>
+           <li class="nav-item">
+               <a class="nav-link" href="{% url 'lote_create' %}"  style="color:white">
+              <span data-feather="plus-square"></span>
+              Nuevo Lote
+            </a>
+          </li>         </li>
         </ul>
         {% block infolote %}{% endblock %}
 

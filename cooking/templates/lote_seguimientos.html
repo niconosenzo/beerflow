@@ -6,14 +6,31 @@
       <h2>Seguimientos presentes para este lote</h2>
       
     {% if seguimiento_maceracion_coccion %}
-          <div class="col-sm-6 col-sm-offset-3">
-                {% for seguimiento in seguimiento_maceracion_coccion %}
+          <div class="table-responsive">
+          {% for seguimiento in seguimiento_maceracion_coccion %} 
+             <caption>Maceracion / Coccion</caption>
+         <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Fecha Inicio:</th>
+                  <th>Observaciones:</th>
+                </tr>
+            </thead>
+            <tbody>
 
-                    <h3>{{ seguimiento.observaciones }} </h3>
+                <tr>
+                    <td>{{ seguimiento.fecha_inicio }}</td>
+                    <td>{{ seguimiento.observaciones }}</td>
+                </tr>
+               </tbody>
+           </table>
 
-                {% endfor %}
+          {% endfor %} 
           </div>
-        {% endif %}
+    {% else %}
+    <h4>    no hay seguimiento, agregar uno nuevo </h4>
+
+    {% endif %}
 
 
         {% if seguimiento_fermentacion_clarificacion %}
