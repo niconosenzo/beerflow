@@ -3,12 +3,15 @@
 {% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
 
 {% block content %}
-      <h2>Seguimientos presentes para este lote</h2>
-      
-    {% if seguimiento_maceracion_coccion %}
+      <h3>Seguimientos presentes para este lote:</h3>
+      <br>
+
+<!-- Iterate first through the list of seguimiento* objects for a lote, then inner for through each seguimiento*-->
+ {% for seguimiento in seguimientos %}
+    {% if seguimiento %}
           <div class="table-responsive">
-          {% for seguimiento in seguimiento_maceracion_coccion %} 
-             <caption>Maceracion / Coccion</caption>
+        {% for innerseguimiento in seguimiento %}
+        <caption> {{ innerseguimiento }} </caption>
          <table class="table table-striped table-sm">
               <thead>
                 <tr>
@@ -17,43 +20,42 @@
                 </tr>
             </thead>
             <tbody>
-
                 <tr>
-                    <td>{{ seguimiento.fecha_inicio }}</td>
-                    <td>{{ seguimiento.observaciones }}</td>
+                    <td>{{ innerseguimiento.fecha_inicio }}</td>
+                    <td>{{ innerseguimiento.observaciones }}</td>
                 </tr>
                </tbody>
            </table>
+           {% endfor %}
 
-          {% endfor %} 
           </div>
-    {% else %}
-    <h4>    no hay seguimiento, agregar uno nuevo </h4>
 
     {% endif %}
+    {% endfor %}
 
+    <!-- Check if there is not a "seguimiento*" object created for a lote, if not, we ask to create one-->
 
-        {% if seguimiento_fermentacion_clarificacion %}
+        {% if not seguimiento_maceracion_coccion %}
           <div class="col-sm-6 col-sm-offset-3">
-                {% for seguimiento in seguimiento_fermentacion_clarificacion %}
 
-                    <h3>{{ seguimiento.observaciones }} </h3>
+                    <p>Agregar planilla de Maceracion Coccion</p>
 
-                {% endfor %}
           </div>
         {% endif %}
 
-
-        {% if seguimiento_carbonatacion %}
+        {% if not seguimiento_fermentacion_clarificacion %}
           <div class="col-sm-6 col-sm-offset-3">
-                {% for seguimiento in seguimiento_carbonatacion %}
 
-                    <h3>{{ seguimiento.observaciones }} </h3>
+                    <p>Agregar planilla de Fermentacion / Clarificacion</p>
 
-                {% endfor %}
           </div>
         {% endif %}
- 
+
+        {% if not seguimiento_carbonatacion %}
+          <div class="col-sm-6 col-sm-offset-3">
+                    <p>Agregar planilla de carbonatacion</p>
+          </div>
+        {% endif %}
 
 
 {% endblock %}

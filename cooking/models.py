@@ -31,7 +31,7 @@ class SeguimientoMaceracionCoccion(models.Model):
     #coccion = models.ForeignKey('Coccion', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return str(self.lote.lote_nro)
+        return str(f"Planilla de Maceración/coccion - Lote número {self.lote.lote_nro}")
 
 class Maceracion(models.Model):
     """
@@ -143,23 +143,24 @@ class SeguimientoFermentacionClarificacion(models.Model):
     Segundo proceso de la elaboración, se distingue todo el proceso por un ID unico, el lote_nro
     """
     lote = models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
-#    fecha_inicio = models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido")
-#    fecha_fin = models.DateField(null=True, blank=True)
-#    observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante al proceso de coccion para un lote determinado", null=True, blank=True)
+    fecha_inicio = models.DateField(help_text="Fecha inicio del proceso de fermentacion, campo requerido")
+    fecha_fin = models.DateField(null=True, blank=True)
     observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante al seguimiento de fermentacion para un lote determinado", null=True, blank=True)
 
-
     def __str__(self):
-        return str(self.lote.lote_nro)
+        return str(f"Planilla de Fermentacion/Clarificacion - Lote número {self.lote.lote_nro}")
+
 
 class SeguimientoCarbonatacion(models.Model):
     """
     Tercer seguimiento de la elaboración, se distingue todo el suiemiento por un ID unico, el lote_nro
     """
+    fecha_inicio = models.DateField(help_text="Fecha inicio del proceso de carbonatacion, campo requerido")
+    fecha_fin = models.DateField(null=True, blank=True)
     lote = models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
     observaciones = models.TextField(max_length=200, help_text="Comentarios,datos o informacion relevante al seguimiento de carbonatacion para un lote determinado", null=True, blank=True)
 
     def __str__(self):
-        return str(self.lote.lote_nro)
+        return str(f"Planilla de Carbonatacion - Lote número {self.lote.lote_nro}")
 
 
