@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from .models import Lote, SeguimientoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, Adicion, SeguimientoFermentacionClarificacion, SeguimientoCarbonatacion
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.forms import ModelForm
 
 
 # Create your views here.
@@ -27,8 +26,19 @@ class LoteView(LoginRequiredMixin,ListView):
     context_object_name = 'lotes'
     template_name = 'lotelist.html'
 
+    # sear bar 
+    def get_queryset(self):
+        if self.request.GET.get("q"):
+            queryset = Lote.objects.filter(lote_nro__icontains=self.request.GET.get("q"))
+            return queryset 
+
+        queryset = Lote.objects.all() 
+        return queryset
+
+
+
 class LoteSeguimientosView(LoginRequiredMixin,DetailView):
-    """
+    """ 
     VBC que lista todos los procesos creados para un lote en particular
     """
     model = Lote
@@ -53,12 +63,9 @@ class LoteCreate(LoginRequiredMixin,CreateView):
         print(self.object.__dict__)
         return reverse('lote_seguimientos_list',  kwargs={'pk':self.object.lote_nro})
 
-#class LoteCreate(LoginRequiredMixin, ModelForm):
-#    model = Lote
-#    fields = '__all__'
-#    class Meta:
-#        model = Lote
-#        fields = '__all__'
-#
-#    def get_success_url(self):
-#        return reverse('lote_seguimientos_list', pk=self.cleaned_data['lote_nro'])
+
+class SeguimientoMaceracionCoccionUpdate(LoginRequiredMixin, UpdateView):
+    pass
+
+class SeguimientoMaceracionCoccionCreate(LoginRequiredMixin, CreateView):
+    pass

@@ -10,6 +10,6 @@ urlpatterns = [
 ]
 urlpatterns += [  
     url(r'^lote/create/$', views.LoteCreate.as_view(), name='lote_create'),
-    #    url(r'^lote/(?P<pk>\d+)/update/$', views.LoteUpdate.as_view(), name='lote_update'),
-    #    url(r'^lote/(?P<pk>\d+)/delete/$', views.LoteDelete.as_view(), name='lote_delete'),
+    url(r'^lote/(?P<pk>\d+)/updateMaceracionCoccion/$', views.SeguimientoMaceracionCoccionUpdate.as_view(), name='maceracion_coccion_update'),
+    url(r'^lote/(?P<pk>\d+)/createMaceracionCoccion/$', views.SeguimientoMaceracionCoccionCreate.as_view(), name='maceracion_coccion_create'),
 ]

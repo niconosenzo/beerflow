@@ -29,8 +29,8 @@
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url 'index' %}">Schuam</a>
-  <input class="form-control form-control-dark w-100" type="text" placeholder="Buscar Lote" aria-label="Search">
-  <ul class="navbar-nav px-3">
+  {% block searcher %}{% endblock %}
+   <ul class="navbar-nav px-3">
        {% if user.is_authenticated %}
           <!--  <a>User: {{ user.get_username }}</a> -->
 
