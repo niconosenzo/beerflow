@@ -6,9 +6,9 @@ class PlanillaMaceracionCoccion(forms.Form):
 
     # Seguimiento Maceracion Coccion
 #    lote = forms.ModelChoiceField(queryset=Lote.objects.all(),disabled=True) # models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
-    lote = forms.IntegerField(disabled=True)
-    fecha_inicio = forms.DateField(disabled=True) #models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido")
-    fecha_fin = forms.DateField(required=False)   #models.DateField(null=True, blank=True)
+    lote = forms.IntegerField()
+    fecha_inicio = forms.DateField(widget = forms.SelectDateWidget) #models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido")
+    fecha_fin = forms.DateField(widget = forms.SelectDateWidget, required=False)   #models.DateField(null=True, blank=True)
     observaciones = forms.CharField(widget=forms.Textarea, required=False) #models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante para un lote determinado", null=True, blank=True)
     
     # Maceracion
