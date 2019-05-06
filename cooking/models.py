@@ -25,7 +25,7 @@ class SeguimientoMaceracionCoccion(models.Model):
     Primer proceso de la elaboración, se distingue todo el proceso por un ID unico, el lote_nro
     """
     lote = models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
-    fecha_inicio = models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido")
+    fecha_inicio = models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido",null=True,blank=True)
     fecha_fin = models.DateField(null=True, blank=True)
     observaciones = models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante para un lote determinado", null=True, blank=True)
 
@@ -52,7 +52,7 @@ class Correccion(models.Model):
     Registro de correccion del PH para una etapa de maceracion/batch determinada
     """
     maceracion = models.ForeignKey('Maceracion', on_delete=models.CASCADE, null=True)
-    inicial = models.FloatField(null=True)
+    inicial = models.FloatField(blank=True, null=True)
     acido_fosforico = models.FloatField(null=True, blank=True)
     final_maceracion = models.FloatField(null=True, blank=True)
 
@@ -62,7 +62,7 @@ class OllaMaceracion(models.Model):
     Clase Registro de datos tomdos de la Olla de Maceracion, tipo de granos, cantidad en kilogramos y agua (L)
     """
     maceracion = models.ForeignKey('Maceracion', on_delete=models.CASCADE, null=True)
-    granos = models.CharField(max_length=50, help_text="Tipo de grano")
+    granos = models.CharField(max_length=50, help_text="Tipo de grano",blank=True)
     cantidad = models.FloatField(null=True, blank=True, help_text='Cantidad expresada en kilogramos')
     agua = models.CharField(max_length=50, help_text="Litros", null=True, blank=True)
 
