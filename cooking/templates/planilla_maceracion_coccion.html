@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Schuam - Planilla de Maceración / Cocción</title>{% endblock %}
+
+{% block content %}
+
+<form role="form" action="" method="post">
+	<h3>Planilla Maceración/Cocción</h3>
+
+	{% csrf_token %}
+	<div class="panel panel-default">
+		<div class="panel-body">
+			{{ form.as_p }}
+            <br>
+            <hr>
+<!-- Código planilla de Maceracion -->
+			{{ maceracion_form_set.management_form }}
+            <h3>Maceración</h3>
+			{% for maceracion_form in maceracion_form_set %}
+				<div class="row">
+					<div class="col-lg-4">
+						<label>Batch número (NO MODIFICAR):</label>
+						{{ maceracion_form.batch_nro }}
+					</div>
+					<div class="col-lg-4">
+						<label>Densidad Finalizacion Maceración:</label>
+						{% if maceracion_form.densidad_finalizacion_maceracion.errors %}
+							{% for error in maceracion_form.densidad_finalizacion_maceracion.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ maceracion_form.densidad_finalizacion_maceracion }}
+					</div>
+					<div class="col-lg-4">
+						<label>Densidad Finalizacion Lavado:</label>
+						{% if maceracion_form.densidad_finalizacion_lavado.errors %}
+							{% for error in maceracion_form.densidad_finalizacion_lavado.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ maceracion_form.densidad_finalizacion_lavado }}
+					</div>
+                    <div class="col-lg-4">
+						<label>Observaciones:</label>
+						{% if maceracion_form.observaciones.errors %}
+							{% for error in maceracion_form.observaciones.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ maceracion_form.observaciones }}
+					</div>
+				</div>
+                <br>
+                <!-- Por cada maceracion, agregamos sus objetos correccion pH -->
+                {{ correccion_form_set.management_form }}
+                <h5>Correción</h5>
+                {% for correccion_form in correccion_form_set %}
+                    <div class="row">
+
+                        <div class="col-lg-4">
+                            <label>Inicial:</label>
+                            {% if correccion_form.inicial.errors %}
+                                {% for error in correccion_form.inicial.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <strong>Error: </strong> {{ error|escape }}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            {{ correccion_form.inicial }}
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Ácido fosfórico:</label>
+                            {% if correccion_form.acido_fosforico.errors %}
+                                {% for error in correccion_form.acido_fosforico.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <strong>Error: </strong> {{ error|escape }}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            {{ correccion_form.acido_fosforico }}
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Densidad Finalizacion Maceración:</label>
+                            {% if correccion_form.final_maceracion.errors %}
+                                {% for error in correccion_form.final_maceracion.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <strong>Error: </strong> {{ error|escape }}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            {{ correccion_form.final_maceracion }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <br>
+                <hr style="background-color: #fff;border-top: 2px dashed #8c8b8b;">
+
+			{% endfor %}
+            <hr style="background-color: #fff;border-top: 2px dashed #8c8b8b;">
+
+<!-- Código planilla de coccion -->
+
+            <br>
+			{{ coccion_form_set.management_form }}
+            <h3>Cocción</h3>
+			{% for coccion_form in coccion_form_set %}
+				<div class="row">
+					<div class="col-lg-4">
+						<label>Batch número (NO MODIFICAR):</label>
+						{{ coccion_form.batch_nro }}
+					</div>
+					<div class="col-lg-4">
+						<label>Densidad Finalizacion de hervor:</label>
+						{% if coccion_form.densidad_finalizacion_hervor.errors %}
+							{% for error in coccion_form.densidad_finalizacion_hervor.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ coccion_form.densidad_finalizacion_hervor }}
+					</div>
+					<div class="col-lg-4">
+						<label>Hora fin de trasiego:</label>
+						{% if coccion_form.hora_fin_trasiego.errors %}
+							{% for error in coccion_form.hora_fin_trasiego.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ coccion_form.hora_fin_trasiego }}
+					</div>
+                    <div class="col-lg-4">
+						<label>Observaciones:</label>
+						{% if coccion_form.observaciones.errors %}
+							{% for error in coccion_form.observaciones.errors %}
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Error: </strong> {{ error|escape }}
+							</div>
+							{% endfor %}
+						{% endif %}
+						{{ coccion_form.observaciones }}
+					</div>
+				</div>
+			{% endfor %}
+
+		</div>
+	</div>
+	<div class="col-lg-12 text-right">
+		<input type="submit" class="btn btn-primary" name="submit" value="Guardar">
+		<a type="button" class="btn btn-default" href="{% url 'lotelist' %}">
+			Cancelar
+		</a>
+	</div>
+</form>
+
+{% endblock %}

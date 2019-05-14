@@ -12,10 +12,10 @@
           <div class="table-responsive">
         {% for innerseguimiento in seguimiento %}
         <caption> <a href="{% url 'maceracion_coccion_update' innerseguimiento.lote.lote_nro %}">{{ innerseguimiento }}</a> </caption>
-         <table class="table table-striped table-sm">
+         <!-- <table class="table table-striped table-sm">
               <thead>
                 <tr>
-                  <th>Fecha Inicio:</th>
+                  <th>Fecha Creación:</th>
                   <th>Observaciones:</th>
                 </tr>
             </thead>
@@ -25,7 +25,8 @@
                     <td>{{ innerseguimiento.observaciones }}</td>
                 </tr>
                </tbody>
-           </table>
+           </table> -->
+                <label for=fechainico> --Fecha de creación: {{ innerseguimiento.fecha_inicio }}-- </label>
            {% endfor %}
 
           </div>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
+
+{% block content %}
+<h3>Batch 1 y 2 para los procesos de Maceracion y Coccion del lote {{ seguimientoMaceracionCoccion.lote.lote_nro }}</h3>
+<br>
+
+<h5>
+<a href="{% url 'maceracion_coccion_update' object.lote.lote_nro '1' %}">Batch número 1 - Maceracion Coccion</a>
+</h5>
+
+<br>
+<br>
+
+<h5>
+<a href="{% url 'maceracion_coccion_update' object.lote.lote_nro '2' %}">Batch número 2 - Maceracion Coccion</a>
+</h5>
+
+{% endblock %}

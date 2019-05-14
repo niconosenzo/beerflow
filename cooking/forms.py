@@ -1,55 +1,89 @@
 from django import forms
 from .models import Lote, SeguimientoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, Adicion, SeguimientoFermentacionClarificacion, SeguimientoCarbonatacion
-
-    
-class PlanillaMaceracionCoccion(forms.Form):
-
-    # Seguimiento Maceracion Coccion
-#    lote = forms.ModelChoiceField(queryset=Lote.objects.all(),disabled=True) # models.OneToOneField(Lote, on_delete=models.CASCADE, primary_key=True)
-    lote = forms.IntegerField()
-    fecha_inicio = forms.DateField(widget = forms.SelectDateWidget) #models.DateField(help_text="Fecha inicio del proceso de coccion, campo requerido")
-    fecha_fin = forms.DateField(widget = forms.SelectDateWidget, required=False)   #models.DateField(null=True, blank=True)
-    observaciones = forms.CharField(widget=forms.Textarea, required=False) #models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante para un lote determinado", null=True, blank=True)
-    
-    # Maceracion
-    batch_nro = forms.IntegerField(disabled=True) #models.PositiveIntegerField(choices=NRO_BATCH, help_text="nro de batch correspondiente, puede ser 1 o 2")
-    ## seguimiento_maceracion_coccion = forms.ModelChoiceField(disabled=True)#models.ForeignKey('SeguimientoMaceracionCoccion', on_delete=models.CASCADE, null=True)
-    densidad_finalizacion_maceracion = forms.FloatField(required=False)#models.FloatField(null=True, blank=True)
-    densidad_finalizacion_lavado = forms.FloatField(required=False) #models.FloatField(null=True, blank=True)
-    observaciones = forms.CharField(widget=forms.Textarea, required=False) #models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante a la etapa de maceracion", null=True, blank=True)
-
-    #Correccion(models.Model):
-    ## maceracion = forms.ModelChoiceField(disabled=True) #models.ForeignKey('Maceracion', on_delete=models.CASCADE, null=True)
-    inicial = forms.FloatField() #models.FloatField(null=True)
-    acido_fosforico = forms.FloatField(required=False) #models.FloatField(null=True, blank=True)
-    final_maceracion = forms.FloatField(help_text="Correción final del pH", required=False) #models.FloatField(null=True, blank=True)
+from django.forms.models import modelformset_factory, inlineformset_factory
 
 
-    # OllaMaceracion:
-    ## maceracion = forms.ModelChoiceField(disabled=True) #models.ForeignKey('Maceracion', on_delete=models.CASCADE, null=True)
-    granos = forms.CharField(max_length=50) #models.CharField(max_length=50, help_text="Tipo de grano")
-    cantidad = forms.FloatField(required=False) #models.FloatField(null=True, blank=True, help_text='Cantidad expresada en kilogramos')
-    agua = forms.CharField(max_length=50,required=False, help_text="Litros") #models.CharField(max_length=50, help_text="Litros", null=True, blank=True)
+class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
+    fecha_inicio = forms.DateField(disabled=True)
+    fecha_fin = forms.DateField(widget=forms.SelectDateWidget())
+    class Meta:
+        model = SeguimientoMaceracionCoccion
+        fields = ['fecha_inicio', 'fecha_fin', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(SeguimientoMaceracionCoccionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
 
 
-    #OllaAguaCaliente(models.Model):
-    ## maceracion = forms.ModelChoiceField(disabled=True)#models.ForeignKey('Maceracion', on_delete=models.CASCADE, null=True)
-    agua_dureza = forms.CharField(max_length=50,empty_value=None, help_text="Dureza del agua dentro de la Olla Caliente",required=False) #models.CharField(max_length=50, help_text="dureza de agua dentro de Olla caliente", null=True, blank=True)
-    agua_ph = forms.CharField(max_length=50, help_text="Dureza del agua dentro de la Olla Caliente",required=False) #models.CharField(max_length=50, help_text="ph del agua dentro Olla caliente", null=True, blank=True)
-    filtracion_hora_inicio = forms.CharField(max_length=50, help_text="hora de inicio de filatracion") #models.CharField(max_length=50, help_text="hora inicio de filtracion")
+class MaceracionModelForm(forms.ModelForm):
+    # batch_nro = forms.CharField(max_length=1, disabled=True)
+    # batch_nro.widget.attrs.update({'size': 1, 'title': 'Batch número:'})
+
+    class Meta:
+        model = Maceracion
+        fields = ['batch_nro','densidad_finalizacion_maceracion',
+                  'densidad_finalizacion_lavado', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(MaceracionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
 
 
-    #EtapaOllaAguaCaliente(models.Model):
-    ## olla_agua_caliente = forms.ModelChoiceField(disabled=True)#models.ForeignKey('OllaAguaCaliente', on_delete=models.CASCADE, null=True)
-    NOMBRE_ETAPA = (
-        ('empaste', 'Empaste'),
-        ('maceracion', 'Maceracion'),
-    )
-    etapa_nombre = forms.CharField(max_length=50, widget=forms.Select(choices=NOMBRE_ETAPA))#models.CharField(max_length=50, choices=NOMBRE_ETAPA, help_text="etapa nombre, solo puede ser Empaste o Maceracion")
-    etapa_hora_inicio = forms.CharField(max_length=50)#models.CharField(max_length=50, help_text="hora inicio")
-    temperatura_R = forms.CharField(max_length=50,empty_value=None,required=False) #models.CharField(max_length=50, null=True, blank=True)
-    temperatura_M = forms.CharField(max_length=50,empty_value=None,required=False) #models.CharField(max_length=50, null=True, blank=True)
-    altura = forms.CharField(max_length=50,empty_value=None,required=False) #models.CharField(max_length=50, null=True, blank=True)
-    agit_rec = forms.CharField(max_length=50,empty_value=None,required=False) #models.CharField(max_length=50, help_text="", null=True, blank=True)
+class CoccionModelForm(forms.ModelForm):
+    # batch_nro = forms.CharField(max_length=1, disabled=True)
+    # batch_nro.widget.attrs.update({'size': 1, 'title': 'Batch número:'})
+
+    class Meta:
+        model = Coccion
+        fields = ['batch_nro', 'densidad_finalizacion_hervor',
+                  'hora_fin_trasiego', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(CoccionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
 
 
+class CorreccionModelForm(forms.ModelForm):
+    class Meta:
+        model = Correccion
+        fields = ['inicial', 'acido_fosforico', 'final_maceracion']
+
+    def __init__(self, *args, **kwargs):
+        super(CorreccionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class OllaMaceracionModelForm(forms.ModelForm):
+    class Meta:
+        model = OllaMaceracion
+        fields = ['granos', 'cantidad', 'agua']
+
+
+class OllaAguaCalienteModelForm(forms.ModelForm):
+    class Meta:
+        model = OllaAguaCaliente
+        fields = ['agua_dureza', 'agua_ph', 'filtracion_hora_inicio']
+
+
+class EtapaOllaAguaCalienteModelForm(forms.ModelForm):
+    class Meta:
+        model = EtapaOllaAguaCaliente
+        fields = ['etapa_nombre', 'etapa_hora_inicio', 'temperatura_R',
+                  'temperatura_M', 'altura', 'agit_rec']
+
+# extra=2 ya que sólo pueden haber 2 batches tanto para cocción como para maceración
+MaceracionSeguimientosFormSet = inlineformset_factory(SeguimientoMaceracionCoccion, Maceracion, form=MaceracionModelForm, extra=2)
+CoccionSeguimientosFormSet = inlineformset_factory(SeguimientoMaceracionCoccion, Coccion, form=CoccionModelForm, extra=2)
+CorreccionFormSet = inlineformset_factory(Maceracion, Correccion, form=CorreccionModelForm, extra=4)

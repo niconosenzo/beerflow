@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 from django.conf.urls import url
 
 
+
 urlpatterns = [
     path('cooking/', include('cooking.urls')),
     path('', RedirectView.as_view(url='/cooking/', permanent=True)),

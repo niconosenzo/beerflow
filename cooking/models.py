@@ -46,9 +46,11 @@ class Maceracion(models.Model):
     densidad_finalizacion_lavado = models.FloatField(null=True, blank=True)
     observaciones = models.TextField(max_length=100, help_text="Comentarios,datos o informacion relevante a la etapa de maceracion", null=True, blank=True)
 
+    def __str__(self):
+        return str(f"Maceracion - Lote {self.seguimiento_maceracion_coccion.lote.lote_nro} - Batch número {self.batch_nro}")
 
 class Correccion(models.Model):
-    """ 
+    """
     Registro de correccion del PH para una etapa de maceracion/batch determinada
     """
     maceracion = models.ForeignKey('Maceracion', on_delete=models.CASCADE, null=True)
@@ -161,5 +163,3 @@ class SeguimientoCarbonatacion(models.Model):
 
     def __str__(self):
         return str(f"Planilla de Carbonatación - Lote número {self.lote.lote_nro}")
-
-

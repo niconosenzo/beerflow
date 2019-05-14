@@ -1,0 +1,41 @@
+
+
+{% extends "base.html" %}
+{% block content %}
+    <h3>{{ obj_maceracion }}</h3>
+    {% if note %}
+        <h4>{{ note }}</h4>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {% for field in form_maceracion %}
+            <div class="fieldWrapper">
+              {{ field.errors }}
+              {{ field.label_tag }} {{ field }}
+
+            </div>
+        {% endfor %}
+        </table>
+        <input type="submit" value="Guardar" />
+    </form>
+
+    <br>
+    <br>
+    <h4>Correccion</h4>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {% for field in form_correccion %}
+            <div class="fieldWrapper">
+              {{ field.errors }}
+              {{ field.label_tag }} {{ field }}
+
+            </div>
+        {% endfor %}
+
+        </table>
+        <input type="submit" value="Guardar" />
+    </form>
+
+{% endblock %}
