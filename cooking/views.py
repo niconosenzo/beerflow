@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView,FormView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -78,157 +78,42 @@ class LoteCreate(LoginRequiredMixin,CreateView):
                        kwargs={'pk': self.object.lote_nro})
 
 
-class maceracionCoccionUpdate(LoginRequiredMixin,UpdateView):
+class MaceracionCoccionUpdate(LoginRequiredMixin, UpdateView):
     model = SeguimientoMaceracionCoccion
     template_name = 'planilla_maceracion_coccion.html'
     form_class = SeguimientoMaceracionCoccionModelForm
+
+
+    def get_context_data(self, **kwargs):
+        data = super(MaceracionCoccionUpdate, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['maceraciones'] = MaceracionCoccionFormSet(self.request.POST, instance=self.object)
+        else:
+            data['maceraciones'] = MaceracionCoccionFormSet(instance=self.object)
+        return data
+
 
     def get_success_url(self):
         return reverse_lazy('maceracion_coccion_update',
                        kwargs={'pk': self.object.lote.lote_nro})
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
 
-        # Planilla Maceracion
-        maceraciones = Maceracion.objects.filter(seguimiento_maceracion_coccion=self.object).order_by('pk')
-        maceracion_data = []
-        correccion_data = []
-    
-        for maceracion in maceraciones:
-            print(maceracion)
-            d = {'batch_nro': maceracion.batch_nro,
-                  'densidad_finalizacion_maceracion': maceracion.densidad_finalizacion_maceracion,
-                  'densidad_finalizacion_lavado': maceracion.densidad_finalizacion_lavado,
-                  'observaciones': maceracion.observaciones}
-            maceracion_data.append(d)
-        #     ## por cada maceracion, buscamos los objetos Correccion pH
-        #
-        #     correcciones = Correccion.objects.filter(maceracion=maceracion)
-        #     for correccion in correcciones:
-        #         print(correccion)
-        #         d1 = {'inicial': correccion.inicial,
-        #               'acido_fosforico': correccion.acido_fosforico,
-        #               'final_maceracion': correccion.final_maceracion}
-        #         correccion_data.append(d1)
-        #     correccion_form_set = CorreccionFormSet(initial=correccion_data)
-        # #print(correccion_data)
-        maceracion_form_set = MaceracionSeguimientosFormSet(initial=maceracion_data)
-        correccion_form_set = CorreccionFormSet(initial=correccion_data)
-
-
-        #
-        # Planilla Coccion
-        cocciones = Coccion.objects.filter(proceso_maceracion_coccion=self.object).order_by('pk')
-        coccion_data = []
-        for coccion in cocciones:
-            d = {'batch_nro': coccion.batch_nro,
-                  'densidad_finalizacion_hervor': coccion.densidad_finalizacion_hervor,
-                  'hora_fin_trasiego': coccion.hora_fin_trasiego,
-                  'observaciones': coccion.observaciones}
-            coccion_data.append(d)
-            ##
-        coccion_form_set = CoccionSeguimientosFormSet(initial=coccion_data)
-        #
-
-        return self.render_to_response(self.get_context_data(form=form,
-                                                             maceracion_form_set=maceracion_form_set,
-                                                             coccion_form_set=coccion_form_set,
-                                                             correccion_form_set=correccion_form_set))
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        maceracion_form_set = MaceracionSeguimientosFormSet(request.POST)
-        coccion_form_set = CoccionSeguimientosFormSet(request.POST)
-        correccion_form_set = CorreccionFormSet(request.POST)
-        if form.is_valid() and maceracion_form_set.is_valid() and coccion_form_set.is_valid() and correccion_form_set.is_valid():
-            return self.form_valid(form, maceracion_form_set,
-                                   coccion_form_set, correccion_form_set)
-        else:
-            return self.form_invalid(form, maceracion_form_set,
-                                     coccion_form_set, correccion_form_set)
-
-    def form_valid(self, form, maceracion_form_set, coccion_form_set, correccion_form_set):
+    def form_valid(self, form):
+        context = self.get_context_data()
+        maceraciones = context['maceraciones']
+    #    with self.transaction.atomic():
+        form.instance.created_by = self.request.user
         self.object = form.save()
-        #Maceracion
-        # maceracion_form_set.instance = self.object
-        # ##Maceracion-Correccion
-        # #correccion_form_set.instance = maceracion_form_set.instance
-        # #Correccion.objects.filter(maceracion=Maceracion.objects.filter(seguimiento_maceracion_coccion=self.object.pk)).delete()
-        # #Maceracion.objects.filter(seguimiento_maceracion_coccion=self.object.pk).delete()
-        # maceracion_form_set.save()
-        # correccion_form_set.save()
+        if maceraciones.is_valid():
+            maceraciones.instance = self.object
+            maceraciones.save()
+        return super(MaceracionCoccionUpdate, self).form_valid(form)
 
-        #Coccion
-        coccion_form_set.instance = self.object
-        Coccion.objects.filter(proceso_maceracion_coccion=self.object.pk).delete()
-        coccion_form_set.save()
+    class CollectionDelete(DeleteView):
+        model = Maceracion
+        template_name = 'confirm_delete.html'
+        success_url = reverse_lazy('lotelist')
 
-
-        # return HttpResponseRedirect(self.success_url)
-        return self.render_to_response(self.get_context_data(form=form,
-                                                             maceracion_form_set=maceracion_form_set,
-                                                             coccion_form_set=coccion_form_set,
-                                                             correccion_form_set=correccion_form_set))
-
-    def form_invalid(self, form, maceracion_form_set, coccion_form_set):
-        return self.render_to_response(self.get_context_data(form=form,
-                                                             maceracion_form_set=maceracion_form_set,
-                                                             coccion_form_set=occion_form_set,
-                                                             correccion_form_set=correccion_form_set))
-
-
-# def maceracionCoccionUpdate(request, pk, batch):
-#
-#     # """
-#     # formulario Planilla Maceracion, se incluyen los formularios de Correccion,
-#     # Olla maceracion, Olla agua caliente y sus etapas.
-#     # """
-#     # obj_maceracion = get_object_or_404(Maceracion,
-#     #                         seguimiento_maceracion_coccion=pk, batch_nro=batch)
-#     # obj_correccion = get_object_or_404(Correccion, maceracion = obj_maceracion)
-#     #
-#     # form_maceracion = MaceracionModelForm(request.POST or None,
-#     #                                       instance=obj_maceracion)
-#     # form_correccion = CorreccionModelForm(request.POST or None,
-#     #                                       instance=obj_correccion)
-#     #
-#     # template_name = 'cooking/planillaMaceracion.html'
-#     # context = {'form_maceracion': form_maceracion,
-#     #            'obj_maceracion': obj_maceracion,
-#     #            'form_correccion': form_correccion,
-#     #            }
-#     # # si es POST, agregamos la nota
-#     # if request.method == 'POST':
-#     #     filledform_maceracion = MaceracionModelForm(request.POST)
-#     #     filledform_correccion = CorreccionModelForm(request.POST)
-#     #
-#     #     if form_maceracion.is_valid() and form_correccion.is_valid():
-#     #         note = '-- Planilla Actualizada %s --' %(time.strftime("%Y-%m-%d %H:%M"))
-#     #         form_maceracion.save()
-#     #         form_correccion.save()
-#     #     else:
-#     #         note = 'No se pudo guardar la planilla'
-#     #     context['note'] = note
-#     #     context['form_maceracion'] = filledform_maceracion
-#     #     context['form_correccion'] = filledform_correccion
-#     #
-#     # return render(request, template_name, context)
-
-
-def coccionUpdate(request, pk, batch):
-    #    obj = get_object_or_404(BlogPost, slug=slug)
-    #    form = BlogPostModelForm(request.POST or None, instance=obj)
-    #    if form.is_valid():
-    #        form.save()
-    #    template_name = 'form.html'
-    #    context = {'form': form, "title": f"Update {obj.title}"}
-    #    return render(request, template_name, context)
-    pass
 
 
 @login_required
