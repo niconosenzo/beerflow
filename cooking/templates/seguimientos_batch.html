@@ -3,18 +3,49 @@
 {% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
 
 {% block content %}
-<h3>Batch 1 y 2 para los procesos de Maceracion y Coccion del lote {{ seguimientoMaceracionCoccion.lote.lote_nro }}</h3>
-<br>
 
-<h5>
-<a href="{% url 'maceracion_coccion_update' object.lote.lote_nro '1' %}">Batch número 1 - Maceracion Coccion</a>
-</h5>
+	<div class="container">
+		<form role="form" action="" method="post">
 
-<br>
-<br>
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ object }}</h3>
+                </div>
+                <div class="card-body">
+    				{% csrf_token %}
+    				<div class="panel panel-default">
+    					<div class="panel-body">
+    						{{ form.as_p }}
+                            <div class="col-lg-12 text-right">
+                                <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
+                            </div>
+    					</div>
+    				</div>
+    			</div>
+            </div>
 
-<h5>
-<a href="{% url 'maceracion_coccion_update' object.lote.lote_nro '2' %}">Batch número 2 - Maceracion Coccion</a>
-</h5>
+			<div class="card-footer">
+                <h3>Batch 1</h3>
+                <h4>
+                <a href="{% url 'maceracion_update' object.lote.lote_nro '1' %}">Maceración</a>
+                </h4>
+                <h4>
+                <a href="{% url 'coccion_update' object.lote.lote_nro '1' %}">Cocción</a>
+                </h4>
+                <br><br>
+                <h3>Batch 2</h3>
+                <h4>
+                <a href="{% url 'maceracion_update' object.lote.lote_nro '2' %}">Maceración</a>
+                </h4>
+                <h4>
+                <a href="{% url 'coccion_update' object.lote.lote_nro '2' %}">Cocción</a>
+                </h4>
+			</div>
+		</form>
+	</div>
+
+
+
+
 
 {% endblock %}
