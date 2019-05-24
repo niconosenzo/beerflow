@@ -2,9 +2,6 @@ from django import forms
 from .models import Lote, SeguimientoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, Adicion, SeguimientoFermentacionClarificacion, SeguimientoCarbonatacion
 from django.forms.models import modelformset_factory, inlineformset_factory, BaseInlineFormSet
 from .utils.forms import is_empty_form, is_form_persisted
-from .custom_layout_object import *
-
-
 
 
 class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
@@ -154,7 +151,7 @@ class BaseNestedFormset(BaseInlineFormSet):
                     form.nested.save(commit=commit)
 
         return result
-    # 
+    #
     # def clean(self):
     #     """
     #     If a parent form has no data, but its nested forms do, we should
