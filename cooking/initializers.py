@@ -54,4 +54,18 @@ def init_planilla_MaceracionCoccion(pk):
                     proceso_maceracion_coccion=seguimiento_maceracion_coccion)
     coccion_batch1.save()
     coccion_batch2.save()
+
+    # para el batch 1:
+    for etapa in [i[0] for i in EtapaCoccion.NOMBRE_ETAPA]:
+        #creamos las etapas individualmente
+        etapatemp = EtapaCoccion(coccion=coccion_batch1, etapa_nombre=etapa)
+        etapatemp.save()
+
+    # para el batch 2
+    for etapa in [i[0] for i in EtapaCoccion.NOMBRE_ETAPA]:
+        #creamos las etapas individualmente
+        etapatemp = EtapaCoccion(coccion=coccion_batch2, etapa_nombre=etapa)
+        etapatemp.save()
+
+
     pass

@@ -118,25 +118,28 @@ class EtapaCoccion(models.Model):
     Clase que describe una etapa de coccion, actualmente pueden ser 5, Lavado, Aumento T, Hervor, Reposos y Trasiego
     """
     coccion = models.ForeignKey('Coccion', on_delete=models.CASCADE, null=True)
-    etapa_hora_inicio = models.CharField(max_length=50, help_text="hora inicio")
     NOMBRE_ETAPA = (
-        ('lavado', 'lavado'),
-        ('aumento T', 'aumento T'),
-        ('hervor', 'hervor'),
-        ('reposo', 'reposo'),
-        ('trasiego', 'trasiego'),
+        ('Lavado', 'Lavado'),
+        ('Aumento T', 'Aumento T'),
+        ('Hervor', 'Hervor'),
+        ('Reposo', 'Reposo'),
+        ('Trasiego', 'Trasiego'),
     )
     etapa_nombre = models.CharField(max_length=50, choices=NOMBRE_ETAPA, help_text="etapa nombre, solo puede ser Lavado, Aumento T, Hervor, Reposos y Trasiego")
-
-
-class Adicion(models.Model):
-    """
-    Clase que representa una adicion a una etapa de coccion determinada
-    """
-    etapa_coccion = models.ForeignKey('EtapaCoccion', on_delete=models.CASCADE, null=True, help_text="Etapa de Coccion a la que pertenece dicha adicion")
-    tipo = models.CharField(max_length=50, help_text="Tipo de adicion")
-    gramos = models.PositiveIntegerField(null=True, blank=True, help_text='Cantidad expresada en gramos')
+    etapa_hora_inicio = models.CharField(max_length=50, help_text="hora inicio", null=True, blank=True)
+    # según planilla, cada etpa solo tiene una adicion
+    tipo_adicion = models.CharField(max_length=50, help_text="Tipo de adicion", null=True, blank=True)
+    gramos_adicion = models.PositiveIntegerField(null=True, blank=True, help_text='Cantidad expresada en gramos')
     hora_adicion = models.CharField(max_length=50, help_text="hora de adicion", null=True, blank=True)
+
+# class Adicion(models.Model):
+#     """
+#     Clase que representa una adicion a una etapa de coccion determinada
+#     """
+#     etapa_coccion = models.ForeignKey('EtapaCoccion', on_delete=models.CASCADE, null=True, help_text="Etapa de Coccion a la que pertenece dicha adicion")
+#     tipo = models.CharField(max_length=50, help_text="Tipo de adicion")
+#     gramos = models.PositiveIntegerField(null=True, blank=True, help_text='Cantidad expresada en gramos')
+#     hora_adicion = models.CharField(max_length=50, help_text="hora de adicion", null=True, blank=True)
 
 
 class SeguimientoFermentacionClarificacion(models.Model):

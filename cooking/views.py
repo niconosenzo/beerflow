@@ -77,6 +77,7 @@ class LoteSeguimientosView(LoginRequiredMixin, DetailView):
 class LoteCreate(LoginRequiredMixin, CreateView):
     model = Lote
     form_class = LoteModelForm
+    template_name = 'lote_form.html'
 
     def get_success_url(self):
         return reverse('lote_seguimientos_list',
@@ -88,21 +89,12 @@ class MaceracionUpdate(LoginRequiredMixin, UpdateView):
     form_class = MaceracionModelForm
     model = Maceracion
 
-    forms_classes = [
-        MaceracionModelForm,
-        CorreccionFormset,
-        OllaMaceracionFormset,
-        OllaAguaCalienteFormset
-    ]
-
     def get_object(self, **kwargs):
         return get_object_or_404(Maceracion, seguimiento_maceracion_coccion=SeguimientoMaceracionCoccion.objects.get(lote=Lote.objects.get(lote_nro=self.kwargs.get("pk"))), batch_nro=self.kwargs.get("batch"))
-
 
     def get_success_url(self):
         return reverse('maceracion_update',
                 kwargs={'pk': self.object.seguimiento_maceracion_coccion.lote.lote_nro, 'batch': self.object.batch_nro})
-
 
     def get_context_data(self, **kwargs):
         context = super(MaceracionUpdate, self).get_context_data(**kwargs)
@@ -114,20 +106,15 @@ class MaceracionUpdate(LoginRequiredMixin, UpdateView):
             context['olla_agua_caliente_form_set'] = OllaAguaCalienteFormset(self.request.POST, instance=self.object)
         else:
             context['olla_maceracion_form_set'] = OllaMaceracionFormset(instance=self.object)
-            context['correccion_form_set'] = CorreccionFormset( instance=self.object)
-            context['olla_agua_caliente_form_set'] = OllaAguaCalienteFormset( instance=self.object)
+            context['correccion_form_set'] = CorreccionFormset(instance=self.object)
+            context['olla_agua_caliente_form_set'] = OllaAguaCalienteFormset(instance=self.object)
         return context
-
-
 
     def form_valid(self, form):
         context = self.get_context_data()
         olla_maceracion_form_set = context['olla_maceracion_form_set']
         correccion_form_set = context['correccion_form_set']
         olla_agua_caliente_form_set = context['olla_agua_caliente_form_set']
-        self.object = form.save()
-
-        form.instance.created_by = self.request.user
         self.object = form.save()
         if olla_maceracion_form_set.is_valid():
             olla_maceracion_form_set.instance = self.object
@@ -140,8 +127,6 @@ class MaceracionUpdate(LoginRequiredMixin, UpdateView):
             olla_agua_caliente_form_set.save()
 
         return super(MaceracionUpdate, self).form_valid(form)
-
-
 
     def form_invalid(self, form, correccion_form_set,
                      olla_maceracion_form_set,
@@ -160,14 +145,33 @@ class CoccionUpdate(LoginRequiredMixin, UpdateView):
     def get_object(self, **kwargs):
         return get_object_or_404(Coccion, proceso_maceracion_coccion=SeguimientoMaceracionCoccion.objects.get(lote=Lote.objects.get(lote_nro=self.kwargs.get("pk"))), batch_nro=self.kwargs.get("batch"))
 
-    def form_valid(self, form):
-        print(form.cleaned_data)
-        return super().form_valid(form)
-
-
     def get_success_url(self):
-        return reverse_lazy('coccion_update',
-                kwargs={'pk': self.object.proceso_maceracion_coccion.lote.lote_nro, 'batch': self.object.batch_nro})
+        return reverse('coccion_update',
+                       kwargs={
+                       'pk': self.object.proceso_maceracion_coccion.lote.lote_nro,
+                       'batch': self.object.batch_nro})
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        etapa_coccion_form_set = context['etapa_coccion_form_set']
+        self.object = form.save()
+        print("fuera de lo validooo")
+        print(etapa_coccion_form_set.errors)
+        if etapa_coccion_form_set.is_valid():
+            print("etapa validaaaa")
+            etapa_coccion_form_set.instance = self.object
+            etapa_coccion_form_set.save()
+        return super(CoccionUpdate, self).form_valid(form)
+
+    def form_invalid(self, form, etapa_coccion_form_set):
+        return self.render_to_response(self.get_context_data(form=form,
+                                                             etapa_coccion_form_set=etapa_coccion_form_set))
+
+
+    def get_context_data(self, **kwargs):
+        context = super(CoccionUpdate, self).get_context_data(**kwargs)
+        context['etapa_coccion_form_set'] = EtapaCoccionFormset(self.request.POST or None, instance=self.object)
+        return context
 
 
 

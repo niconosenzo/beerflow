@@ -1,0 +1,28 @@
+                <!-- Etapa Coccion -->
+                    <table>
+                    <caption style="caption-side: top;">Etapa Cocción</caption>
+
+                    {{ etapa_coccion_form_set.management_form }}
+                        <thead>
+                       {% for etapa_coccion_form in etapa_coccion_form_set %}
+
+                            {% if forloop.first %}
+                                {% for field in etapa_coccion_form %}
+                                    <th>{{ field.label_tag }}</th>
+                                {% endfor %}
+                            {% endif %}
+                        </thead>
+                         <tbody>
+                             <tr>
+                                {% for field in etapa_coccion_form %}
+                                    <td>{{ field }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% for dict in etapa_coccion_form_set.errors %}
+                        {% for error in dict.values %}
+                            {{ error }}
+                        {% endfor %}
+                    {% endfor %}

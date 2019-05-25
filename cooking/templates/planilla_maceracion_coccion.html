@@ -14,10 +14,13 @@
                     {{ form.as_p }}
 
                     {% if correccion_form_set %}
-                        {% include 'cooking/planillaMaceracion.html' %}
+                        {% include 'planillaMaceracion.html' %}
+					{% elif etapa_coccion_form_set %}
+						{% include 'planillaCoccion.html' %}
                     {% endif %}
 
                     <div class="col-lg-12 text-right">
+						<br>
                         <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
                     </div>
 

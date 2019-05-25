@@ -1,5 +1,5 @@
 from django import forms
-from .models import Lote, SeguimientoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, Adicion, SeguimientoFermentacionClarificacion, SeguimientoCarbonatacion
+from .models import Lote, SeguimientoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, SeguimientoFermentacionClarificacion, SeguimientoCarbonatacion
 from django.forms.models import modelformset_factory, inlineformset_factory, BaseInlineFormSet
 from .utils.forms import is_empty_form, is_form_persisted
 
@@ -41,7 +41,6 @@ class MaceracionModelForm(forms.ModelForm):
 
 class LoteModelForm(forms.ModelForm):
 
-
     class Meta:
         model = Lote
         fields = ['lote_nro', 'observaciones']
@@ -52,25 +51,6 @@ class LoteModelForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
-
-
-
-class CoccionModelForm(forms.ModelForm):
-    batch_nro = forms.CharField(max_length=1, disabled=True)
-    batch_nro.widget.attrs.update({'size': 1, 'title': 'Batch número:'})
-
-    class Meta:
-        model = Coccion
-        fields = ['batch_nro', 'densidad_finalizacion_hervor',
-                  'hora_fin_trasiego', 'observaciones']
-
-    def __init__(self, *args, **kwargs):
-        super(CoccionModelForm, self).__init__(*args, **kwargs)
-        for field in iter(self.fields):
-            self.fields[field].widget.attrs.update({
-                'class': 'form-control'
-            })
-
 
 class CorreccionModelForm(forms.ModelForm):
     class Meta:
@@ -219,3 +199,46 @@ OllaAguaCalienteFormset = inlineformset_factory(Maceracion,
                                                       formset=BaseNestedFormset,
                                                       fields= ['agua_dureza', 'agua_ph', 'filtracion_hora_inicio'],extra=0,
                                                       can_delete=False)
+
+
+class CoccionModelForm(forms.ModelForm):
+    batch_nro = forms.CharField(max_length=1, disabled=True)
+    batch_nro.widget.attrs.update({'size': 1, 'title': 'Batch número:'})
+
+    class Meta:
+        model = Coccion
+        fields = ['batch_nro', 'densidad_finalizacion_hervor',
+                  'hora_fin_trasiego', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(CoccionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class EtapaCoccionModelForm(forms.ModelForm):
+    # etapa_nombre = forms.CharField(max_length=10, disabled=True)
+    # etapa_nombre.widget.attrs.update()
+
+    class Meta:
+        model = EtapaCoccion
+        fields = ['etapa_nombre', 'etapa_hora_inicio', 'tipo_adicion',
+                  'gramos_adicion', 'hora_adicion']
+
+    def __init__(self, *args, **kwargs):
+        super(EtapaCoccionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+EtapaCoccionFormset = inlineformset_factory(Coccion, EtapaCoccion,
+                                            fields=['etapa_nombre',
+                                                    'etapa_hora_inicio',
+                                                    'tipo_adicion',
+                                                    'gramos_adicion',
+                                                    'hora_adicion'], extra=0,
+                                            can_delete=False)
