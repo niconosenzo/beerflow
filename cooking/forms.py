@@ -1,30 +1,46 @@
 from django import forms
-from .models import Lote, SeguimientoMaceracionCoccion, Maceracion, Correccion, OllaMaceracion, OllaAguaCaliente, EtapaOllaAguaCaliente, Coccion, EtapaCoccion, SeguimientoFermentacionClarificacion, SeguimientoCarbonatacion
 from django.forms.models import modelformset_factory, inlineformset_factory, BaseInlineFormSet
 from .utils.forms import is_empty_form, is_form_persisted
+from .models import (
+    Lote,
+    SeguimientoMaceracionCoccion,
+    Maceracion,
+    Correccion,
+    OllaMaceracion,
+    OllaAguaCaliente,
+    EtapaOllaAguaCaliente,
+    Coccion,
+    EtapaCoccion,
+    SeguimientoFermentacion,
+    SeguimientoCarbonatacion,
+    SeguimientoClarificacionFiltracion,
+    ParametrosFundamentales,
+    InoculacionLevadura,
+    RegistroFermentacion,
+    RegistroClarificacionFiltracion
+)
 
 
 class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
     fecha_inicio = forms.DateField(disabled=True)
     fecha_fin = forms.DateField(widget=forms.SelectDateWidget())
+
     class Meta:
         model = SeguimientoMaceracionCoccion
         fields = ['fecha_inicio', 'fecha_fin', 'observaciones']
 
     def __init__(self, *args, **kwargs):
-        super(SeguimientoMaceracionCoccionModelForm, self).__init__(*args, **kwargs)
+        super(SeguimientoMaceracionCoccionModelForm,
+              self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
 
 
-
-
 class MaceracionModelForm(forms.ModelForm):
     batch_nro = forms.CharField(disabled=True)
     batch_nro.widget.attrs.update({'size': 1, 'title': 'Batch número:'})
-
 
     class Meta:
         model = Maceracion
@@ -51,6 +67,7 @@ class LoteModelForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
+
 
 class CorreccionModelForm(forms.ModelForm):
     class Meta:
@@ -91,8 +108,6 @@ class EtapaOllaAguaCalienteModelForm(forms.ModelForm):
                   'temperatura_M', 'altura', 'agit_rec']
 
 
-
-
 class BaseNestedFormset(BaseInlineFormSet):
     def add_fields(self, form, index):
         super(BaseNestedFormset, self).add_fields(form, index)
@@ -107,7 +122,6 @@ class BaseNestedFormset(BaseInlineFormSet):
             ),
         )
 
-
     def is_valid(self):
         result = super(BaseNestedFormset, self).is_valid()
 
@@ -115,11 +129,9 @@ class BaseNestedFormset(BaseInlineFormSet):
             # look at any nested formsets, as well
             for form in self.forms:
                 if hasattr(form, 'nested'):
-                    print("tiene nested")
                     result = result and form.nested.is_valid()
-                    print(form.nested.is_valid())
-        return result
 
+        return result
 
     def save(self, commit=True):
 
@@ -184,21 +196,28 @@ CorreccionFormset = inlineformset_factory(Maceracion, Correccion,
                                           can_delete=True)
 
 OllaMaceracionFormset = inlineformset_factory(Maceracion, OllaMaceracion,
-                                              fields=['granos','cantidad',
-                                                        'agua'], extra=1,
+                                              fields=['granos', 'cantidad',
+                                                      'agua'], extra=1,
                                               can_delete=True)
 
 
-EtapaOllaAguaCalienteFormset = inlineformset_factory(OllaAguaCaliente, EtapaOllaAguaCaliente,
-                                          fields=['etapa_nombre', 'etapa_hora_inicio', 'temperatura_R',
-                                                    'temperatura_M', 'altura', 'agit_rec'], extra=1,
-                                          can_delete=True)
+EtapaOllaAguaCalienteFormset = inlineformset_factory(OllaAguaCaliente,
+                                                     EtapaOllaAguaCaliente,
+                                                     fields=['etapa_nombre',
+                                                             'etapa_hora_inicio',
+                                                             'temperatura_R',
+                                                             'temperatura_M',
+                                                             'altura',
+                                                             'agit_rec'],
+                                                     extra=1,
+                                                     can_delete=True)
+
 
 OllaAguaCalienteFormset = inlineformset_factory(Maceracion,
-                                                      OllaAguaCaliente,
-                                                      formset=BaseNestedFormset,
-                                                      fields= ['agua_dureza', 'agua_ph', 'filtracion_hora_inicio'],extra=0,
-                                                      can_delete=False)
+                                                OllaAguaCaliente,
+                                                formset=BaseNestedFormset,
+                                                fields=['agua_dureza', 'agua_ph', 'filtracion_hora_inicio'], extra=0,
+                                                can_delete=False)
 
 
 class CoccionModelForm(forms.ModelForm):

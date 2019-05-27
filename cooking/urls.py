@@ -4,7 +4,7 @@ from django.urls import path
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.LoteView.as_view(), name='lotelist'),
     url(r'^lote/$', views.LoteView.as_view(), name='lotelist'),
     url(r'^lote/(?P<pk>\d+)$', views.LoteSeguimientosView.as_view(),
         name='lote_seguimientos_list'),

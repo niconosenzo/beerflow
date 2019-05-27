@@ -25,21 +25,24 @@
             </div>
 
 			<div class="card-footer">
-                <h3>Batch 1</h3>
-                <h4>
-                <a href="{% url 'maceracion_update' object.lote.lote_nro '1' %}">Maceración</a>
-                </h4>
-                <h4>
-                <a href="{% url 'coccion_update' object.lote.lote_nro '1' %}">Cocción</a>
-                </h4>
-                <br><br>
-                <h3>Batch 2</h3>
-                <h4>
-                <a href="{% url 'maceracion_update' object.lote.lote_nro '2' %}">Maceración</a>
-                </h4>
-                <h4>
-                <a href="{% url 'coccion_update' object.lote.lote_nro '2' %}">Cocción</a>
-                </h4>
+				  <h4>Batch 1</h4>
+				  <ul class="list-group list-group-horizontal">
+				    <li class="list-group-item">
+						<a href="{% url 'maceracion_update' object.lote.lote_nro '1' %}">Maceración</a>
+					</li>
+				    <li class="list-group-item">
+						<a href="{% url 'coccion_update' object.lote.lote_nro '1' %}">Cocción</a>
+					</li>
+				  </ul>
+				  <h4>Batch 2</h4>
+				  <ul class="list-group list-group-horizontal">
+					<li class="list-group-item">
+						<a href="{% url 'maceracion_update' object.lote.lote_nro '2' %}">Maceración</a>
+					</li>
+					<li class="list-group-item">
+						<a href="{% url 'coccion_update' object.lote.lote_nro '2' %}">Cocción</a>
+					</li>
+				</div>
 			</div>
 		</form>
 	</div>
