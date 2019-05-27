@@ -1,20 +1,24 @@
                 <!-- CORRECCION -->
-                    <table>
+                    <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                     <caption style="caption-side: top;">Corrección pH</caption>
 
                     {{ correccion_form_set.management_form }}
-                        <thead>
+                        <thead class="thead-dark">
                        {% for correccion_form in correccion_form_set %}
 
+                           {% for hidden in correccion_form.hidden_fields %}
+                            {{ hidden }}
+                           {% endfor %}
+
                             {% if forloop.first %}
-                                {% for field in correccion_form %}
+                                {% for field in correccion_form.visible_fields %}
                                     <th>{{ field.label_tag }}</th>
                                 {% endfor %}
                             {% endif %}
                         </thead>
                          <tbody>
                              <tr>
-                                    {% for field in correccion_form %}
+                                    {% for field in correccion_form.visible_fields %}
                                         <td>{{ field }}</td>
                                     {% endfor %}
                                 </tr>
@@ -23,22 +27,26 @@
                     </table>
 
                 <!-- OLLA MACERACIÓN -->
-                    <table>
+                    <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                         <caption style="caption-side: top;">Olla Maceración</caption>
 
                         {{ olla_maceracion_form_set.management_form }}
-                            <thead>
+                            <thead class="thead-dark">
                            {% for olla_maceracion_form in olla_maceracion_form_set %}
 
+                               {% for hidden in olla_maceracion_form.hidden_fields %}
+                                {{ hidden }}
+                               {% endfor %}
+
                                 {% if forloop.first %}
-                                    {% for field in olla_maceracion_form %}
+                                    {% for field in olla_maceracion_form.visible_fields %}
                                         <th>{{ field.label_tag }}</th>
                                     {% endfor %}
                                 {% endif %}
                             </thead>
                              <tbody>
                                  <tr>
-                                        {% for field in olla_maceracion_form %}
+                                        {% for field in olla_maceracion_form.visible_fields %}
                                             <td>{{ field }}</td>
                                         {% endfor %}
                                     </tr>
@@ -48,22 +56,26 @@
 
                 <!-- OLLA AGUA CALIENTE -->
 
-                <table>
+                <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                     <caption style="caption-side: top;">Olla Agua Caliente</caption>
 
                     {{ olla_agua_caliente_form_set.management_form }}
-                        <thead>
+                        <thead class="thead-dark">
                        {% for olla_agua_caliente_form in olla_agua_caliente_form_set %}
 
+                           {% for hidden in olla_agua_caliente_form.hidden_fields %}
+                                {{ hidden }}
+                           {% endfor %}
+
                             {% if forloop.first %}
-                                {% for field in olla_agua_caliente_form %}
+                                {% for field in olla_agua_caliente_form.visible_fields %}
                                     <th>{{ field.label_tag }}</th>
                                 {% endfor %}
                             {% endif %}
                         </thead>
                          <tbody>
                              <tr>
-                                    {% for field in olla_agua_caliente_form %}
+                                    {% for field in olla_agua_caliente_form.visible_fields %}
                                         <td>{{ field }}</td>
                                     {% endfor %}
                                 </tr>
@@ -75,20 +87,24 @@
                         {{ olla_agua_caliente_form.nested.non_form_errors }}
 
 
-                        <table>
+                        <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                             <caption style="caption-side: top;">Etapa Olla Agua Caliente</caption>
-                            <thead>
+                            <thead class="thead-dark">
                                 {% for form in olla_agua_caliente_form.nested.forms %}
 
+                                {% for hidden in form.hidden_fields %}
+                                     {{ hidden }}
+                                {% endfor %}
+
                                     {% if forloop.first %}
-                                        {% for field in form %}
+                                        {% for field in form.visible_fields %}
                                             <th>{{ field.label_tag }}</th>
                                         {% endfor %}
                                     {% endif %}
                             </thead>
                             <tbody>
                                     <tr>
-                                        {% for field in form %}
+                                        {% for field in form.visible_fields %}
                                             <td>{{ field }}</td>
                                         {% endfor %}
                                     </tr>

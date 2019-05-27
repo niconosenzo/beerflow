@@ -1,28 +1,27 @@
                 <!-- Etapa Coccion -->
-                    <table>
+                    <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                     <caption style="caption-side: top;">Etapa Cocción</caption>
 
                     {{ etapa_coccion_form_set.management_form }}
-                        <thead>
+                        <thead class="thead-dark">
                        {% for etapa_coccion_form in etapa_coccion_form_set %}
 
+                       {% for hidden in etapa_coccion_form.hidden_fields %}
+                            {{ hidden }}
+                       {% endfor %}
+
                             {% if forloop.first %}
-                                {% for field in etapa_coccion_form %}
+                                {% for field in etapa_coccion_form.visible_fields %}
                                     <th>{{ field.label_tag }}</th>
                                 {% endfor %}
                             {% endif %}
                         </thead>
                          <tbody>
                              <tr>
-                                {% for field in etapa_coccion_form %}
+                                {% for field in etapa_coccion_form.visible_fields %}
                                     <td>{{ field }}</td>
                                 {% endfor %}
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                    {% for dict in etapa_coccion_form_set.errors %}
-                        {% for error in dict.values %}
-                            {{ error }}
-                        {% endfor %}
-                    {% endfor %}

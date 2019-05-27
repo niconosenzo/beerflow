@@ -2,14 +2,17 @@
 
 {% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
 
-{% block searcher %}
-  <form method='GET' action=''>
-  <input class="form-control form-control-dark w-100" name='q' type="text" placeholder="Buscar Lote" aria-label="Search">
-  </form>
-{% endblock %}
+
 
 {% block content %}
+    {% block searcher %}
+      <form method='GET' action=''>
+      <input class="form-control form-control-dark w-100" name='q' type="text" placeholder="Buscar Lote" aria-label="Search">
+      </form>
+      <br>
+    {% endblock %}
       <h2>Lista de lotes</h2>
+      <p>Más reciente primero</p>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
