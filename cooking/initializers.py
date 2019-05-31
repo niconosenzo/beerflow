@@ -62,6 +62,8 @@ def init_planilla_MaceracionCoccion(pk):
         # creamos las etapas individualmente
         etapatemp = EtapaCoccion(coccion=coccion_batch1, etapa_nombre=etapa)
         etapatemp.save()
+        if etapa == 'Hervor':
+            adicion = AdicionCoccion(etapa_coccion=etapatemp)
 
     # para el batch 2
     for etapa in [i[0] for i in EtapaCoccion.NOMBRE_ETAPA]:
@@ -69,4 +71,28 @@ def init_planilla_MaceracionCoccion(pk):
         etapatemp = EtapaCoccion(coccion=coccion_batch2, etapa_nombre=etapa)
         etapatemp.save()
 
+    pass
+
+
+def init_planilla_Fermentacion(pk):
+    # seguimiento fermentacion
+    seguimiento_fermentacion = SeguimientoFermentacion(
+        lote=Lote.objects.get(lote_nro=pk),
+        fecha_inicio=datetime.date.today())
+    seguimiento_fermentacion.save()
+
+    # parametros fundamentales
+    parametros_fundamentales = ParametrosFundamentales(
+        lote=Lote.objects.get(lote_nro=pk))
+    parametros_fundamentales.save()
+
+    # inoculación levadura
+    inoculacion_levadura = InoculacionLevadura(
+        seguimiento_control_fermentacion=seguimiento_fermentacion)
+    inoculacion_levadura.save()
+
+    # registro fermentacion
+    registro_fermentacion = RegistroFermentacion(
+        seguimiento_control_fermentacion=seguimiento_fermentacion)
+    registro_fermentacion.save()
     pass

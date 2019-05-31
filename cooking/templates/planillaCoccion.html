@@ -18,10 +18,18 @@
                         </thead>
                          <tbody>
                              <tr>
-                                {% for field in etapa_coccion_form.visible_fields %}
-                                    <td>{{ field }}</td>
-                                {% endfor %}
+                            {% for field in etapa_coccion_form.visible_fields %}
+                                {% if etapa_coccion_form.etapa_nombre.value == 'Hervor' %}
+                                    <td>{{ field }}*{{ field.errors }}</td>
+                                {% else %}
+                                    <td>{{ field }}{{ field.errors }}</td>
+                                {% endif %}
+                            {% endfor %}
                             </tr>
                         {% endfor %}
                         </tbody>
+
                     </table>
+                    <a href=#>(*)Ver adiciones correspondientes</a>
+                    <br>
+                    <br>

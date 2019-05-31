@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from . import views
-from django.urls import path
 
 
 urlpatterns = [
@@ -15,6 +14,9 @@ urlpatterns += [
     url(r'^lote/(?P<pk>\d+)/BatchMaceracionCoccion/$',
         views.BatchMaceracionCoccionlist.as_view(),
         name='batch_maceracion_coccion_list'),
+    url(r'^lote/(?P<pk>\d+)/Fermentacion/$',
+        views.FermentacionUpdate.as_view(),
+        name='fermentacion_list'),
     url(r'^lote/(?P<pk>\d+)/(?P<batch>\d+)/updateMaceracion/$',
         views.MaceracionUpdate.as_view(), name='maceracion_update'),
     url(r'^lote/(?P<pk>\d+)/(?P<batch>\d+)/updateCoccion/$',
@@ -22,4 +24,7 @@ urlpatterns += [
     url(r'^lote/(?P<pk>\d+)/createMaceracionCoccion/$',
         views.SeguimientoMaceracionCoccionCreate,
         name='maceracion_coccion_create'),
+    url(r'^lote/(?P<pk>\d+)/createFermentacion/$',
+        views.SeguimientoFermentacionCreate,
+        name='fermentacion_create'),
 ]

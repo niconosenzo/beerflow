@@ -7,7 +7,7 @@
     <br>
 
     <!-- Iterate first through the list of seguimiento* objects for a lote, then inner for through each seguimiento*-->
-    {% for seguimiento in seguimientos %}
+    <!-- {% for seguimiento in seguimientos %}
         {% if seguimiento %}
         <div class = "table-responsive">
             {% for innerseguimiento in seguimiento %}
@@ -16,7 +16,7 @@
             {% endfor %}
         </div>
         {% endif %}
-    {% endfor %}
+    {% endfor %} -->
 
 
     <!-- Check if there is not a "seguimiento*" object created for a lote, if not, we ask to create one-->
@@ -24,19 +24,32 @@
     {% if not seguimiento_maceracion_coccion %}
     <div class="col-sm-6 col-sm-offset-3">
         <a href="{% url 'maceracion_coccion_create' lote.lote_nro %}">Crear Planilla Maceracion / Coccion</a>
-
     </div>
+    {% else %}
+        <div class = "table-responsive">
+            {% for innerseguimiento in seguimiento_maceracion_coccion %}
+                <caption > <a href = "{% url 'batch_maceracion_coccion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }} </a> </caption>
+                    <label for = fechainico > --Fecha de creación: {{ innerseguimiento.fecha_inicio }} - - </label>
+            {% endfor %}
+        </div>
     {% endif %}
 
     {% if not seguimiento_fermentacion %}
     <div class="col-sm-6 col-sm-offset-3">
-        <a href="#">Crear Planilla Fermentación </a>
+        <a href="{% url 'fermentacion_create' lote.lote_nro %} ">Crear Planilla Fermentación </a>
     </div>
+    {% else %}
+        <div class = "table-responsive">
+            {% for innerseguimiento in seguimiento_fermentacion %}
+                <caption > <a href = "{% url 'fermentacion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }} </a> </caption>
+                    <label for = fechainico > --Fecha de creación: {{ innerseguimiento.fecha_inicio }} - - </label>
+            {% endfor %}
+        </div>
     {% endif %}
 
     {% if not seguimiento_clarificacion_filtracion %}
     <div class="col-sm-6 col-sm-offset-3">
-        <a href="#">Crear Planilla Clarificación / Fermentación </a>
+        <a href="#">Crear Planilla Clarificación / Filtración </a>
     </div>
     {% endif %}
 

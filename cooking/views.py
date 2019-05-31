@@ -6,7 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from .forms import *
-from .initializers import init_planilla_MaceracionCoccion
+from .initializers import (
+    init_planilla_MaceracionCoccion,
+    init_planilla_Fermentacion)
 from django.contrib import messages
 
 
@@ -55,6 +57,13 @@ class BatchMaceracionCoccionlist(LoginRequiredMixin, UpdateView):
         return reverse('batch_maceracion_coccion_list',
                        kwargs={'pk': self.object.lote.lote_nro})
 
+    def get_context_data(self, **kwargs):
+        context = super(BatchMaceracionCoccionlist,
+                        self).get_context_data(**kwargs)
+
+        context['pk'] = self.kwargs.get("pk")
+        return context
+
 
 class LoteSeguimientosView(LoginRequiredMixin, DetailView):
     """
@@ -91,11 +100,110 @@ class LoteCreate(LoginRequiredMixin, CreateView):
                        kwargs={'pk': self.object.lote_nro})
 
 
+class FermentacionUpdate(LoginRequiredMixin, UpdateView):
+    """
+    VBC que lista los datos de seguimiento de Fermentacion
+    """
+    model = SeguimientoFermentacion
+    template_name = 'seguimientos_fermentacion.html'
+    form_class = SeguimientoFermentacionModelForm
+
+    def get_success_url(self):
+        return reverse('fermentacion_list',
+                       kwargs={'pk': self.object.lote.lote_nro})
+
+    def get_context_data(self, **kwargs):
+        context = super(FermentacionUpdate, self).get_context_data(**kwargs)
+        object_parametros = ParametrosFundamentales.objects.get(
+            lote=Lote.objects.get(lote_nro=self.kwargs.get("pk")))
+        object_inoculacion = InoculacionLevadura.objects.get(
+            seguimiento_control_fermentacion=SeguimientoFermentacion.objects.get(
+                lote=Lote.objects.get(lote_nro=self.kwargs.get("pk"))))
+        context['registro_fermentacion_form_set'] = RegistroFermentacionFormset(
+            self.request.POST or None, instance=self.object)
+
+        if self.request.POST:
+            context['parametros_fundamentales'] = ParametrosFundamentalesModelForm(
+                self.request.POST, instance=object_parametros)
+            context['inoculacion_levadura'] = InoculacionLevaduraModelForm(
+                self.request.POST or None, instance=object_inoculacion)
+        else:
+            context['parametros_fundamentales'] = ParametrosFundamentalesModelForm(initial={
+                #    'lote': object_parametros.lote,
+                'dO': object_parametros.dO,
+                'dF': object_parametros.dF,
+                'alcohol_teorico': object_parametros.alcohol_teorico,
+                'pH_inicial': object_parametros.pH_inicial,
+                'pH_final': object_parametros.pH_final,
+                'observaciones': object_parametros.observaciones})
+
+            context['inoculacion_levadura'] = InoculacionLevaduraModelForm(initial={
+                'hora': object_inoculacion.hora,
+                'levadura': object_inoculacion.levadura,
+                'dosis': object_inoculacion.dosis,
+                'temp_sala': object_inoculacion.temp_sala,
+                'temp_mosto': object_inoculacion.temp_mosto,
+                'densidad': object_inoculacion.densidad,
+                'observaciones': object_inoculacion.observaciones})
+        context['pk'] = self.kwargs.get("pk")
+        return context
+    #
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(SeguimientoFermentacion, lote=Lote.objects.get(lote_nro=self.kwargs.get("pk")))
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        parametros_fundamentales = context['parametros_fundamentales']
+        inoculacion_levadura = context['inoculacion_levadura']
+        registro_fermentacion_form_set = context['registro_fermentacion_form_set']
+        print(form.errors)
+        if form.is_valid():
+            self.object = form.save()
+            print("saving seguimiento fermentacion")
+            messages.success(self.request, 'Planilla Fermentación guardada')
+        print(parametros_fundamentales.errors)
+        if parametros_fundamentales.is_valid():
+            parametros_fundamentales.instance = self.object
+            # print(parametros_fundamentales)
+            parametros_fundamentales.save(commit=True)
+            print("saving parametros fundamentales")
+            messages.success(
+                self.request, 'Parametros Fundamentales guardados')
+        print(registro_fermentacion_form_set.errors)
+        if registro_fermentacion_form_set.is_valid():
+            registro_fermentacion_form_set.instance = self.object
+            registro_fermentacion_form_set.save()
+            print("saving registro fermentacion")
+            messages.success(
+                self.request, 'Registros de Fermentación guardados')
+        print(inoculacion_levadura.errors)
+        if inoculacion_levadura.is_valid():
+            inoculacion_levadura.instance = self.object
+            print(inoculacion_levadura)
+            inoculacion_levadura.save()
+            print("saving inoculación levadura")
+            messages.success(
+                self.request, 'Inoculación de Levadura guardada')
+
+        return super(FermentacionUpdate, self).form_valid(form)
+
+    def form_invalid(self, form, parametros_fundamentales,
+                     inoculacion_levadura,
+                     registro_fermentacion_form_set):
+        # def form_invalid(self, form):
+        messages.error(self.request, 'Error al guardar.')
+        # return self.render_to_response(self.get_context_data(form=form))
+        return self.render_to_response(self.get_context_data(form=form,
+                                                             parametros_fundamentales=parametros_fundamentales,
+                                                             inoculacion_levadura=inoculacion_levadura,
+                                                             registro_fermentacion_form_set=registro_fermentacion_form_set))
+
+
 class MaceracionUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'planilla_maceracion_coccion.html'
     form_class = MaceracionModelForm
     model = Maceracion
-    saved_message = ""
 
     def get_object(self, **kwargs):
         return get_object_or_404(Maceracion, seguimiento_maceracion_coccion=SeguimientoMaceracionCoccion.objects.get(lote=Lote.objects.get(lote_nro=self.kwargs.get("pk"))), batch_nro=self.kwargs.get("batch"))
@@ -107,21 +215,13 @@ class MaceracionUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(MaceracionUpdate, self).get_context_data(**kwargs)
 
-        if self.request.POST:
-            # context['form'] = form
-            context['olla_maceracion_form_set'] = OllaMaceracionFormset(
-                self.request.POST, instance=self.object)
-            context['correccion_form_set'] = CorreccionFormset(
-                self.request.POST, instance=self.object)
-            context['olla_agua_caliente_form_set'] = OllaAguaCalienteFormset(
-                self.request.POST, instance=self.object)
-        else:
-            context['olla_maceracion_form_set'] = OllaMaceracionFormset(
-                instance=self.object)
-            context['correccion_form_set'] = CorreccionFormset(
-                instance=self.object)
-            context['olla_agua_caliente_form_set'] = OllaAguaCalienteFormset(
-                instance=self.object)
+        context['olla_maceracion_form_set'] = OllaMaceracionFormset(
+            self.request.POST or None, instance=self.object)
+        context['correccion_form_set'] = CorreccionFormset(
+            self.request.POST or None, instance=self.object)
+        context['olla_agua_caliente_form_set'] = OllaAguaCalienteFormset(
+            self.request.POST or None, instance=self.object)
+        context['pk'] = self.kwargs.get("pk")
         return context
 
     def form_valid(self, form):
@@ -140,7 +240,6 @@ class MaceracionUpdate(LoginRequiredMixin, UpdateView):
             correccion_form_set.instance = self.object
             correccion_form_set.save()
             messages.success(self.request, 'Datos Corrección guardados')
-
         if olla_agua_caliente_form_set.is_valid():
             olla_agua_caliente_form_set.instance = self.object
             olla_agua_caliente_form_set.save()
@@ -195,7 +294,16 @@ class CoccionUpdate(LoginRequiredMixin, UpdateView):
         context = super(CoccionUpdate, self).get_context_data(**kwargs)
         context['etapa_coccion_form_set'] = EtapaCoccionFormset(
             self.request.POST or None, instance=self.object)
+        context['pk'] = self.kwargs.get("pk")
         return context
+
+
+class AdicionCoccionUpdate(LoginRequiredMixin, UpdateView):
+    template_name = 'coccion_adiciones.html'
+    form_class = AdicionEtapaCoccionModelForm
+    model = AdicionCoccion
+
+    pass
 
 
 @login_required
@@ -206,5 +314,15 @@ def SeguimientoMaceracionCoccionCreate(request, pk):
      a partir del lote_nro (pk)
      """
     init_planilla_MaceracionCoccion(pk)
+    return HttpResponseRedirect(reverse('lote_seguimientos_list',
+                                        kwargs={'pk': pk}))
+
+
+@login_required
+def SeguimientoFermentacionCreate(request, pk):
+    """
+    Inicializamos planilla de fermentación
+    """
+    init_planilla_Fermentacion(pk)
     return HttpResponseRedirect(reverse('lote_seguimientos_list',
                                         kwargs={'pk': pk}))

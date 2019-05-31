@@ -1,3 +1,31 @@
+        <!-- OLLA MACERACIÓN -->
+            <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <caption style="caption-side: top;">Olla Maceración</caption>
+
+                {{ olla_maceracion_form_set.management_form }}
+                    <thead class="thead-dark">
+                   {% for olla_maceracion_form in olla_maceracion_form_set %}
+
+                       {% for hidden in olla_maceracion_form.hidden_fields %}
+                        {{ hidden }}
+                       {% endfor %}
+
+                        {% if forloop.first %}
+                            {% for field in olla_maceracion_form.visible_fields %}
+                                <th>{{ field.label_tag }}</th>
+                            {% endfor %}
+                        {% endif %}
+                    </thead>
+                     <tbody>
+                         <tr>
+                                {% for field in olla_maceracion_form.visible_fields %}
+                                    <td>{{ field }}{{ field.errors }}</td>
+                                {% endfor %}
+                            </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
                 <!-- CORRECCION -->
                     <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                     <caption style="caption-side: top;">Corrección pH</caption>
@@ -19,40 +47,13 @@
                          <tbody>
                              <tr>
                                     {% for field in correccion_form.visible_fields %}
-                                        <td>{{ field }}</td>
+                                        <td>{{ field }}{{ field.errors }}</td>
                                     {% endfor %}
                                 </tr>
                         {% endfor %}
                         </tbody>
                     </table>
 
-                <!-- OLLA MACERACIÓN -->
-                    <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                        <caption style="caption-side: top;">Olla Maceración</caption>
-
-                        {{ olla_maceracion_form_set.management_form }}
-                            <thead class="thead-dark">
-                           {% for olla_maceracion_form in olla_maceracion_form_set %}
-
-                               {% for hidden in olla_maceracion_form.hidden_fields %}
-                                {{ hidden }}
-                               {% endfor %}
-
-                                {% if forloop.first %}
-                                    {% for field in olla_maceracion_form.visible_fields %}
-                                        <th>{{ field.label_tag }}</th>
-                                    {% endfor %}
-                                {% endif %}
-                            </thead>
-                             <tbody>
-                                 <tr>
-                                        {% for field in olla_maceracion_form.visible_fields %}
-                                            <td>{{ field }}</td>
-                                        {% endfor %}
-                                    </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
 
                 <!-- OLLA AGUA CALIENTE -->
 

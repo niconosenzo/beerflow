@@ -1,6 +1,8 @@
 from django import forms
+from django.forms import ModelForm, Textarea
+import datetime
+from django.contrib.admin import widgets
 from django.forms.models import modelformset_factory, inlineformset_factory, BaseInlineFormSet
-from .utils.forms import is_empty_form, is_form_persisted
 from .models import (
     Lote,
     SeguimientoMaceracionCoccion,
@@ -17,13 +19,14 @@ from .models import (
     ParametrosFundamentales,
     InoculacionLevadura,
     RegistroFermentacion,
+    AdicionCoccion,
     RegistroClarificacionFiltracion
 )
 
 
 class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
     fecha_inicio = forms.DateField(disabled=True)
-    fecha_fin = forms.DateField(widget=forms.SelectDateWidget())
+    fecha_fin = forms.DateField(input_formats=['%Y-%m-%d'])
 
     class Meta:
         model = SeguimientoMaceracionCoccion
@@ -36,6 +39,11 @@ class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
+            if field == 'observaciones':
+                self.fields[field].widget.attrs.update({
+                    'cols': 10,
+                    'rows': 2
+                })
 
 
 class MaceracionModelForm(forms.ModelForm):
@@ -53,6 +61,11 @@ class MaceracionModelForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
+            if field == 'observaciones':
+                self.fields[field].widget.attrs.update({
+                    'cols': 10,
+                    'rows': 2
+                })
 
 
 class LoteModelForm(forms.ModelForm):
@@ -94,8 +107,20 @@ class OllaMaceracionModelForm(forms.ModelForm):
                 'class': 'form-control'
             })
 
+############################
+##########################
+#########################
+
 
 class OllaAguaCalienteModelForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(OllaAguaCalienteModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
     class Meta:
         model = OllaAguaCaliente
         fields = ['agua_dureza', 'agua_ph', 'filtracion_hora_inicio']
@@ -106,6 +131,13 @@ class EtapaOllaAguaCalienteModelForm(forms.ModelForm):
         model = EtapaOllaAguaCaliente
         fields = ['etapa_nombre', 'etapa_hora_inicio', 'temperatura_R',
                   'temperatura_M', 'altura', 'agit_rec']
+
+    def __init__(self, *args, **kwargs):
+        super(EtapaOllaAguaCalienteModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
 
 
 class BaseNestedFormset(BaseInlineFormSet):
@@ -143,66 +175,24 @@ class BaseNestedFormset(BaseInlineFormSet):
                     form.nested.save(commit=commit)
 
         return result
-    #
-    # def clean(self):
-    #     """
-    #     If a parent form has no data, but its nested forms do, we should
-    #     return an error
-    #     """
-    #     super().clean()
-    #
-    #     for form in self.forms:
-    #         if not hasattr(form, 'nested') or self._should_delete_form(form):
-    #             continue
-    #
-    #         if self._is_adding_nested_inlines_to_empty_form(form):
-    #             form.add_error(
-    #                 field=None,
-    #                 error=_('Estás intentando agregar etapas a un Olla de Agua '
-    #                         'caliente que aún no existe'))
-    #
-    # def _is_adding_nested_inlines_to_empty_form(self, form):
-    #     """
-    #     Are we trying to add data in nested inlines to a form that has no data?
-    #     e.g. Adding Images to a new Book whose data we haven't entered?
-    #     """
-    #     if not hasattr(form, 'nested'):
-    #         # A basic form; it has no nested forms to check.
-    #         return False
-    #
-    #     if is_form_persisted(form):
-    #         # We're editing (not adding) an existing model.
-    #         return False
-    #
-    #     if not is_empty_form(form):
-    #         # The form has errors, or it contains valid data.
-    #         return False
-    #
-    #     # All the inline forms that aren't being deleted:
-    #     non_deleted_forms = set(form.nested.forms).difference(
-    #         set(form.nested.deleted_forms)
-    #     )
-    #
-    #
-    #     # At this point we know that the "form" is empty.
-    #     # In all the inline forms that aren't being deleted, are there any that
-    #     # contain data? Return True if so.
-    #     return any(not is_empty_form(nested_form) for nested_form in non_deleted_forms)
 
 
 CorreccionFormset = inlineformset_factory(Maceracion, Correccion,
+                                          form=CorreccionModelForm,
                                           fields=['inicial', 'acido_fosforico',
                                                   'final_maceracion'], extra=1,
-                                          can_delete=True)
+                                          can_delete=False)
 
 OllaMaceracionFormset = inlineformset_factory(Maceracion, OllaMaceracion,
+                                              form=OllaMaceracionModelForm,
                                               fields=['granos', 'cantidad',
                                                       'agua'], extra=1,
-                                              can_delete=True)
+                                              can_delete=False)
 
 
 EtapaOllaAguaCalienteFormset = inlineformset_factory(OllaAguaCaliente,
                                                      EtapaOllaAguaCaliente,
+                                                     form=EtapaOllaAguaCalienteModelForm,
                                                      fields=['etapa_nombre',
                                                              'etapa_hora_inicio',
                                                              'temperatura_R',
@@ -210,11 +200,12 @@ EtapaOllaAguaCalienteFormset = inlineformset_factory(OllaAguaCaliente,
                                                              'altura',
                                                              'agit_rec'],
                                                      extra=1,
-                                                     can_delete=True)
+                                                     can_delete=False)
 
 
 OllaAguaCalienteFormset = inlineformset_factory(Maceracion,
                                                 OllaAguaCaliente,
+                                                form=OllaAguaCalienteModelForm,
                                                 formset=BaseNestedFormset,
                                                 fields=['agua_dureza', 'agua_ph', 'filtracion_hora_inicio'], extra=0,
                                                 can_delete=False)
@@ -235,16 +226,20 @@ class CoccionModelForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
+            if field == 'observaciones':
+                self.fields[field].widget.attrs.update({
+                    'cols': 10,
+                    'rows': 2
+                })
 
 
 class EtapaCoccionModelForm(forms.ModelForm):
-    # etapa_nombre = forms.CharField(max_length=10, disabled=True)
-    # etapa_nombre.widget.attrs.update()
+    etapa_nombre = forms.CharField(disabled=True)
+    etapa_nombre.widget.attrs.update()
 
     class Meta:
         model = EtapaCoccion
-        fields = ['etapa_nombre', 'etapa_hora_inicio', 'tipo_adicion',
-                  'gramos_adicion', 'hora_adicion']
+        fields = ['etapa_nombre', 'etapa_hora_inicio']
 
     def __init__(self, *args, **kwargs):
         super(EtapaCoccionModelForm, self).__init__(*args, **kwargs)
@@ -255,9 +250,118 @@ class EtapaCoccionModelForm(forms.ModelForm):
 
 
 EtapaCoccionFormset = inlineformset_factory(Coccion, EtapaCoccion,
-                                            fields=['etapa_nombre',
-                                                    'etapa_hora_inicio',
-                                                    'tipo_adicion',
-                                                    'gramos_adicion',
-                                                    'hora_adicion'], extra=0,
+                                            form=EtapaCoccionModelForm,
+                                            extra=0,
                                             can_delete=False)
+
+
+class AdicionEtapaCoccionModelForm(forms.ModelForm):
+
+    class Meta:
+        model = AdicionCoccion
+        fields = ['tipo', 'gramos', 'hora_adicion']
+
+    def __init__(self, *args, **kwargs):
+        super(AdicionEtapaCoccionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+AdicionEtapaCoccionFormset = modelformset_factory(AdicionCoccion,
+                                                  form=AdicionEtapaCoccionModelForm,
+                                                  extra=0)
+
+# SeguimientoCarbonatacion,
+# SeguimientoClarificacionFiltracion
+# RegistroClarificacionFiltracion
+
+# PLANILLA FERMENTACION
+
+
+class SeguimientoFermentacionModelForm(forms.ModelForm):
+    # fecha_llenado = forms.DateField(widget=forms.SelectDateWidget())
+    fecha_llenado = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha_inoculacion_levadura = forms.DateField(input_formats=['%Y-%m-%d'])
+
+    class Meta:
+        model = SeguimientoFermentacion
+        fields = ['vasija', 'fecha_llenado', 'litros',
+                  'fecha_inoculacion_levadura', 'tipo_levadura']
+
+    def __init__(self, *args, **kwargs):
+        super(SeguimientoFermentacionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class RegistroFermentacionModelForm(forms.ModelForm):
+
+    fecha = forms.DateField(input_formats=['%Y-%m-%d'])
+
+    class Meta:
+        model = RegistroFermentacion
+        fields = ['fecha', 'hora',
+                  'densidad', 'temp_sala', 'temp_mosto', 'pH', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(RegistroFermentacionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+            if field == 'observaciones':
+                self.fields[field].widget.attrs.update({
+                    'cols': 10,
+                    'rows': 2
+                })
+
+
+class InoculacionLevaduraModelForm(forms.ModelForm):
+    class Meta:
+        model = InoculacionLevadura
+        fields = ['hora', 'levadura', 'dosis', 'temp_sala', 'temp_mosto',
+                  'densidad', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(InoculacionLevaduraModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+            if field == 'observaciones':
+                self.fields[field].widget.attrs.update({
+                    'cols': 10,
+                    'rows': 2
+                })
+
+
+class ParametrosFundamentalesModelForm(forms.ModelForm):
+    class Meta:
+        model = ParametrosFundamentales
+        fields = ['dO', 'dF', 'alcohol_teorico', 'pH_inicial',
+                  'pH_final', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(ParametrosFundamentalesModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+            if field == 'observaciones':
+                self.fields[field].widget.attrs.update({
+                    'cols': 10,
+                    'rows': 2
+                })
+
+
+RegistroFermentacionFormset = inlineformset_factory(SeguimientoFermentacion, RegistroFermentacion,
+                                                    form=RegistroFermentacionModelForm,
+                                                    fields=['fecha', 'hora', 'densidad',
+                                                            'temp_sala', 'temp_mosto',
+                                                            'pH', 'observaciones'],
+                                                    extra=1,
+                                                    can_delete=False)

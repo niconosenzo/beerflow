@@ -22,13 +22,12 @@ from django.conf.urls.static import static
 from django.conf.urls import url
 
 
-
 urlpatterns = [
     path('cooking/', include('cooking.urls')),
     path('', RedirectView.as_view(url='/cooking/', permanent=True)),
     path('admin/', admin.site.urls),
 ]
-#Add Django site authentication urls (for login, logout, password management)
+# Add Django site authentication urls (for login, logout, password management)
 urlpatterns += [
     url(r'^accounts/', include('django.contrib.auth.urls')),
 ]

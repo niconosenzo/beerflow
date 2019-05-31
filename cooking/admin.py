@@ -1,22 +1,23 @@
 from django.contrib import admin
 from .models import (
-                     Lote,
-                     SeguimientoMaceracionCoccion,
-                     Maceracion,
-                     Correccion,
-                     OllaMaceracion,
-                     OllaAguaCaliente,
-                     EtapaOllaAguaCaliente,
-                     Coccion,
-                     EtapaCoccion,
-                     SeguimientoFermentacion,
-                     SeguimientoCarbonatacion,
-                     SeguimientoClarificacionFiltracion,
-                     ParametrosFundamentales,
-                     InoculacionLevadura,
-                     RegistroFermentacion,
-                     RegistroClarificacionFiltracion
-                     )
+    Lote,
+    SeguimientoMaceracionCoccion,
+    Maceracion,
+    Correccion,
+    OllaMaceracion,
+    OllaAguaCaliente,
+    EtapaOllaAguaCaliente,
+    Coccion,
+    EtapaCoccion,
+    SeguimientoFermentacion,
+    SeguimientoCarbonatacion,
+    SeguimientoClarificacionFiltracion,
+    ParametrosFundamentales,
+    InoculacionLevadura,
+    RegistroFermentacion,
+    AdicionCoccion,
+    RegistroClarificacionFiltracion
+)
 
 admin.site.register(Lote)
 admin.site.register(SeguimientoMaceracionCoccion)
@@ -34,5 +35,6 @@ admin.site.register(InoculacionLevadura)
 admin.site.register(RegistroFermentacion)
 admin.site.register(RegistroClarificacionFiltracion)
 admin.site.register(SeguimientoCarbonatacion)
+admin.site.register(AdicionCoccion)
 
 # Register your models here.
