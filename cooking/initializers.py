@@ -62,14 +62,18 @@ def init_planilla_MaceracionCoccion(pk):
         # creamos las etapas individualmente
         etapatemp = EtapaCoccion(coccion=coccion_batch1, etapa_nombre=etapa)
         etapatemp.save()
-        if etapa == 'Hervor':
-            adicion = AdicionCoccion(etapa_coccion=etapatemp)
+
+    adicion1 = AdicionCoccion(coccion=coccion_batch1)
+    adicion1.save()
 
     # para el batch 2
     for etapa in [i[0] for i in EtapaCoccion.NOMBRE_ETAPA]:
         # creamos las etapas individualmente
         etapatemp = EtapaCoccion(coccion=coccion_batch2, etapa_nombre=etapa)
         etapatemp.save()
+
+    adicion2 = AdicionCoccion(coccion=coccion_batch2)
+    adicion2.save()
 
     pass
 

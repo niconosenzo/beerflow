@@ -172,7 +172,6 @@ class FermentacionUpdate(LoginRequiredMixin, UpdateView):
         if registro_fermentacion_form_set.is_valid():
             registro_fermentacion_form_set.instance = self.object
             registro_fermentacion_form_set.save()
-            print("saving registro fermentacion")
             messages.success(
                 self.request, 'Registros de Fermentación guardados')
         print(inoculacion_levadura.errors)
@@ -272,6 +271,8 @@ class CoccionUpdate(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         etapa_coccion_form_set = context['etapa_coccion_form_set']
+        adicion_etapa_coccion_form_set = context['adicion_etapa_coccion_form_set']
+
         if form.is_valid():
             self.object = form.save()
             messages.success(self.request, 'Planilla Cocción guardada')
@@ -280,27 +281,26 @@ class CoccionUpdate(LoginRequiredMixin, UpdateView):
             messages.success(self.request, 'Etapa Cocción gardada.')
             etapa_coccion_form_set.instance = self.object
             etapa_coccion_form_set.save()
+        if adicion_etapa_coccion_form_set.is_valid():
+            messages.success(self.request, 'Adición gardada.')
+            adicion_etapa_coccion_form_set.instance = self.object
+            adicion_etapa_coccion_form_set.save()
         return super(CoccionUpdate, self).form_valid(form)
 
-    def form_invalid(self, form, etapa_coccion_form_set):
+    def form_invalid(self, form, etapa_coccion_form_set, adicion_etapa_coccion_form_set):
         messages.error(self.request, 'Error al guardar.')
         return self.render_to_response(self.get_context_data(form=form,
-                                                             etapa_coccion_form_set=etapa_coccion_form_set))
+                                                             etapa_coccion_form_set=etapa_coccion_form_set,
+                                                             adicion_etapa_coccion_form_set=adicion_etapa_coccion_form_set))
 
     def get_context_data(self, **kwargs):
         context = super(CoccionUpdate, self).get_context_data(**kwargs)
         context['etapa_coccion_form_set'] = EtapaCoccionFormset(
             self.request.POST or None, instance=self.object)
+        context['adicion_etapa_coccion_form_set'] = AdicionEtapaCoccionFormset(
+            self.request.POST or None, instance=self.object)
         context['pk'] = self.kwargs.get("pk")
         return context
-
-
-class AdicionCoccionUpdate(LoginRequiredMixin, UpdateView):
-    template_name = 'coccion_adiciones.html'
-    form_class = AdicionEtapaCoccionModelForm
-    model = AdicionCoccion
-
-    pass
 
 
 @login_required

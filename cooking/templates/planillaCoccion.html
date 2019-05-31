@@ -20,16 +20,52 @@
                              <tr>
                             {% for field in etapa_coccion_form.visible_fields %}
                                 {% if etapa_coccion_form.etapa_nombre.value == 'Hervor' %}
-                                    <td>{{ field }}*{{ field.errors }}</td>
+                                    <td>{{ field }}*Ver adiciones en siguiente tabla.</td>
                                 {% else %}
-                                    <td>{{ field }}{{ field.errors }}</td>
+                                    <td>{{ field }}</td>
                                 {% endif %}
                             {% endfor %}
                             </tr>
+
                         {% endfor %}
                         </tbody>
 
                     </table>
-                    <a href=#>(*)Ver adiciones correspondientes</a>
+
+                    <!-- Adicion Etapa Coccion -->
+                        <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                        <caption style="caption-side: top;">Adiciones etapa Hervor</caption>
+
+                        {{ adicion_etapa_coccion_form_set.management_form }}
+                            <thead class="thead-dark">
+                           {% for adicion_etapa_coccion_form in adicion_etapa_coccion_form_set %}
+
+                           {% for hidden in adicion_etapa_coccion_form.hidden_fields %}
+                                {{ hidden }}
+                           {% endfor %}
+
+                                {% if forloop.first %}
+                                    {% for field in adicion_etapa_coccion_form.visible_fields %}
+                                        <th>{{ field.label_tag }}</th>
+                                    {% endfor %}
+                                {% endif %}
+                            </thead>
+                             <tbody>
+                                 <tr>
+                                {% for field in adicion_etapa_coccion_form.visible_fields %}
+                                    {% if adicion_etapa_coccion_form.etapa_nombre.value == 'Hervor' %}
+                                        <td>{{ field }}*{{ field.errors }}</td>
+                                    {% else %}
+                                        <td>{{ field }}{{ field.errors }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                                </tr>
+
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+
+
                     <br>
                     <br>

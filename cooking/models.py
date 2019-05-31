@@ -172,10 +172,12 @@ class EtapaCoccion(models.Model):
 
 class AdicionCoccion(models.Model):
     """
-    Clase que representa una adicion a una etapa de coccion determinada
+    Clase que representa una adicion durante la etapa de hervor para una
+    coccion determinada
     """
-    etapa_coccion = models.ForeignKey(
-        'EtapaCoccion', on_delete=models.CASCADE, null=True)
+    # etapa_coccion = models.ForeignKey(
+    #     'EtapaCoccion', on_delete=models.CASCADE, null=True)
+    coccion = models.ForeignKey('Coccion', on_delete=models.CASCADE, null=True)
     tipo = models.CharField(max_length=20, help_text="Tipo de adicion")
     gramos = models.PositiveIntegerField(
         null=True, blank=True, help_text='Cantidad expresada en gramos')

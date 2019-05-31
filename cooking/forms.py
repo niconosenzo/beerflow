@@ -269,9 +269,10 @@ class AdicionEtapaCoccionModelForm(forms.ModelForm):
             })
 
 
-AdicionEtapaCoccionFormset = modelformset_factory(AdicionCoccion,
-                                                  form=AdicionEtapaCoccionModelForm,
-                                                  extra=0)
+AdicionEtapaCoccionFormset = inlineformset_factory(Coccion, AdicionCoccion,
+                                                   form=AdicionEtapaCoccionModelForm,
+                                                   extra=1,
+                                                   can_delete=False)
 
 # SeguimientoCarbonatacion,
 # SeguimientoClarificacionFiltracion
