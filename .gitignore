@@ -56,7 +56,6 @@ coverage.xml
 local_settings.py
 db.sqlite3
 migrations/
-beerflow/settings.py
 .gitignore
 
 # Flask stuff:
