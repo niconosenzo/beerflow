@@ -160,14 +160,12 @@ class FermentacionUpdate(LoginRequiredMixin, UpdateView):
         print(form.errors)
         if form.is_valid():
             self.object = form.save()
-            print("saving seguimiento fermentacion")
             messages.success(self.request, 'Planilla Fermentación guardada')
         print(parametros_fundamentales.errors)
         if parametros_fundamentales.is_valid():
-            parametros_fundamentales.instance = self.object
-            # print(parametros_fundamentales)
-            parametros_fundamentales.save(commit=True)
-            print("saving parametros fundamentales")
+            pf = parametros_fundamentales.save(commit=False)
+            pf.lote = Lote.objects.get(lote_nro=context['pk'])
+            pf.save()
             messages.success(
                 self.request, 'Parametros Fundamentales guardados')
         print(registro_fermentacion_form_set.errors)
@@ -179,10 +177,9 @@ class FermentacionUpdate(LoginRequiredMixin, UpdateView):
                 self.request, 'Registros de Fermentación guardados')
         print(inoculacion_levadura.errors)
         if inoculacion_levadura.is_valid():
-            inoculacion_levadura.instance = self.object
-            print(inoculacion_levadura)
-            inoculacion_levadura.save()
-            print("saving inoculación levadura")
+            il = inoculacion_levadura.save(commit=False)
+            il.lote = Lote.objects.get(lote_nro=context['pk'])
+            il.save()
             messages.success(
                 self.request, 'Inoculación de Levadura guardada')
 
