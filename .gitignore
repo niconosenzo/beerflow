@@ -58,7 +58,6 @@ db.sqlite3
 migrations/
 beerflow/settings.py
 .gitignore
-manage.py
 
 # Flask stuff:
 instance/
