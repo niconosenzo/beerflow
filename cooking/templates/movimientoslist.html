@@ -28,18 +28,22 @@
               <th>Cliente</th>
               <th>Ingresa:</th>
               <th>Egresa:</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
+
           {% if movimientos %}
             {% for movimiento in movimientos %}
             <tr>
                 <td>{{ movimiento.fecha }}</td>
-                <td><a href="#">{{ movimiento.barril }}</td>
-                <td><a href="#">{{ movimiento.lote }}</td>
+                <td>{{ movimiento.barril }}</td>
+                <td><a href="{% url 'lote_seguimientos_list' movimiento.lote.lote_nro %}">{{ movimiento.lote }}</td>
                 <td>{{ movimiento.cliente }}</td>
                 <td>{{ movimiento.ingresa }}</td>
                 <td>{{ movimiento.egresa }}</td>
+                <td><a href="{% url 'movimientosupdate' movimiento.id %}">Actualizar</td>
+
             </tr>
             {% endfor %}
           {% endif %}

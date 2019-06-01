@@ -37,24 +37,18 @@
                          Movimientos
                        </a>
                   </li>
-                  <li class="nav-item">
-                      <li class="nav-item">
-                          <a class="nav-link" href="{% url 'lote_create' %}"  style="color:white">
-                         Nuevo Lote
-                       </a>
-                  </li>
-                  <li class="nav-item">
-                      <li class="nav-item">
-                          <a class="nav-link" href="{% url 'barril_create' %}"  style="color:white">
-                         Nuevo Barril
-                       </a>
-                  </li>
-                  <li class="nav-item">
-                      <li class="nav-item">
-                          <a class="nav-link" href="{% url 'movimiento_create' %}"  style="color:white">
-                         Nuevo Movimiento
-                       </a>
-                  </li>
+                  <!-- Dropdown -->
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Agregar
+                      </a>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'lote_create' %}">Lote</a>
+                        <a class="dropdown-item" href="{% url 'barril_create' %}">Barril</a>
+                        <a class="dropdown-item" href="{% url 'movimiento_create' %}">Movimiento Barril/Lote</a>
+                      </div>
+                    </li>
+
                   {% if user.is_authenticated %}
                       <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Salir</a></li>
                  {% endif %}

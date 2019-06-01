@@ -8,10 +8,12 @@ urlpatterns = [
     url(r'^barril/$', views.BarrilView.as_view(), name='barrillist'),
     url(r'^movimiento/$', views.MovimientosBarrilView.as_view(),
         name='movimientoslist'),
-    url(r'^movimiento/(?P<pk>\d+)/$', views.MovimientosBarrilView.as_view(),
+    url(r'^movimiento/(?P<lote>\d+)/$', views.LoteMovimientosBarrilView.as_view(),
         name='movimientoslistlote'),
     url(r'^lote/(?P<pk>\d+)$', views.LoteSeguimientosView.as_view(),
         name='lote_seguimientos_list'),
+    url(r'^movimientoUpdate/(?P<pk>\d+)/$', views.UpdateMovimientosBarrilView.as_view(),
+        name='movimientosupdate'),
 ]
 
 urlpatterns += [

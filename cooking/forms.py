@@ -101,8 +101,11 @@ class BarrilModelForm(forms.ModelForm):
 class MovimientosBarrilModelForm(forms.ModelForm):
 
     fecha = forms.DateField(input_formats=['%Y-%m-%d'])
-    ingresa = forms.DateField(input_formats=['%Y-%m-%d'])
-    egresa = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha.widget.attrs.update({'autocomplete': 'off'})
+    ingresa = forms.DateField(required=False, input_formats=['%Y-%m-%d'])
+    ingresa.widget.attrs.update({'autocomplete': 'off', 'required': 'False'})
+    egresa = forms.DateField(required=False, input_formats=['%Y-%m-%d'])
+    egresa.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = MovimientosBarril

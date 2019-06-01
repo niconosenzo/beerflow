@@ -61,7 +61,7 @@ class BarrilView(LoginRequiredMixin, ListView):
 
 class MovimientosBarrilView(LoginRequiredMixin, ListView):
     """
-    vista genérica basada en clases para listar barriles
+    vista genérica basada en clases para listar movimientos de barriles
     """
     model = MovimientosBarril
     paginate_by = 10
@@ -79,13 +79,32 @@ class MovimientosBarrilView(LoginRequiredMixin, ListView):
             queryset = MovimientosBarril.objects.filter(
                 lote__lote_nro__icontains=self.request.GET.get("l"))
             return queryset
-
-        if self.kwargs.get("lote"):
-            queryset = MovimientosBarril.objects.filter(
-                lote__lote_nro__icontains=self.request.GET.get("lote"))
-            return queryset
-
         return MovimientosBarril.objects.all()
+
+
+class UpdateMovimientosBarrilView(LoginRequiredMixin, UpdateView):
+    model = MovimientosBarril
+    form_class = MovimientosBarrilModelForm
+    template_name = 'movimientos_form.html'
+
+    def get_success_url(self):
+        return reverse('movimientoslist')
+
+
+class LoteMovimientosBarrilView(LoginRequiredMixin, ListView):
+    """
+    vista genérica basada en clases para listar movimientos
+    para un lote determinado
+    """
+    model = MovimientosBarril
+    paginate_by = 10
+    context_object_name = 'movimientos'
+    template_name = 'movimientoslist.html'
+
+    def get_queryset(self):
+        queryset = MovimientosBarril.objects.filter(
+            lote__lote_nro__icontains=self.kwargs['lote'])
+        return queryset
 
 
 class BatchMaceracionCoccionlist(LoginRequiredMixin, UpdateView):

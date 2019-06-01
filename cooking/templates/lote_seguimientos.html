@@ -6,18 +6,6 @@
     <h3>Seguimientos presentes para este lote:</h3>
     <br>
 
-    <!-- Iterate first through the list of seguimiento* objects for a lote, then inner for through each seguimiento*-->
-    <!-- {% for seguimiento in seguimientos %}
-        {% if seguimiento %}
-        <div class = "table-responsive">
-            {% for innerseguimiento in seguimiento %}
-                <caption > <a href = "{% url 'batch_maceracion_coccion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }} </a> </caption>
-                    <label for = fechainico > --Fecha de creación: {{ innerseguimiento.fecha_inicio }} - - </label>
-            {% endfor %}
-        </div>
-        {% endif %}
-    {% endfor %} -->
-
 
     <!-- Check if there is not a "seguimiento*" object created for a lote, if not, we ask to create one-->
 

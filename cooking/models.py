@@ -3,6 +3,7 @@ from django.db import models
 from .utils import constants
 from datetime import time
 
+
 # Create your models here.
 
 
@@ -56,6 +57,9 @@ class MovimientosBarril(models.Model):
                                help_text="Cliente, obligatorio")
     ingresa = models.DateField(null=True, blank=True)
     egresa = models.DateField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-fecha"]
 
     def __str__(self):
         mov = "Movimiento de barril " + \
