@@ -16,7 +16,9 @@ from .models import (
     InoculacionLevadura,
     RegistroFermentacion,
     AdicionCoccion,
-    RegistroClarificacionFiltracion
+    RegistroClarificacionFiltracion,
+    Barril,
+    MovimientosBarril
 )
 
 admin.site.register(Lote)
@@ -36,5 +38,8 @@ admin.site.register(RegistroFermentacion)
 admin.site.register(RegistroClarificacionFiltracion)
 admin.site.register(SeguimientoCarbonatacion)
 admin.site.register(AdicionCoccion)
+admin.site.register(Barril)
+admin.site.register(MovimientosBarril)
+
 
 # Register your models here.

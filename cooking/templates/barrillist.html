@@ -1,34 +1,34 @@
 {% extends "base.html" %}
 
-{% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
+{% block title %}<title>Schuam - Lista de Barriles</title>{% endblock %}
 
 
 
 {% block content %}
     {% block searcher %}
       <form method='GET' action=''>
-      <input class="form-control form-control-dark w-100" name='q' type="text" placeholder="Buscar por número de lote" aria-label="Search">
+      <input class="form-control form-control-dark w-100" name='q' type="text" placeholder="Buscar por identificador de barril" aria-label="Search">
       </form>
       <br>
     {% endblock %}
-      <h2>Lista de lotes</h2>
+      <h2>Lista de barriles</h2>
       <p>Más reciente primero</p>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
             <tr>
-              <th>Lote Nro:</th>
+              <th>Barril Nro:</th>
               <th>Fecha Agregado:</th>
               <th>Observaciones:</th>
             </tr>
           </thead>
           <tbody>
-          {% if lotes %}
-            {% for lote in lotes %}
+          {% if barriles %}
+            {% for barril in barriles %}
             <tr>
-                <td><a href="{% url 'lote_seguimientos_list' lote.lote_nro %}">{{ lote.lote_nro }}</td>
-                <td>{{ lote.fecha_creacion }}</td>
-                <td>{{ lote.observaciones }}</td>
+                <td><a href="#">{{ barril.barril_nro }}</td>
+                <td>{{ barril.fecha_agregado }}</td>
+                <td>{{ barril.observaciones }}</td>
             </tr>
             {% endfor %}
           {% endif %}

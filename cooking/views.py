@@ -15,9 +15,6 @@ from django.contrib import messages
 # Create your views here.
 @login_required
 def index(request):
-    """
-    Función vista para la página inicio del sitio.
-    """
     return render(
         request,
         'index.html'
@@ -41,6 +38,54 @@ class LoteView(LoginRequiredMixin, ListView):
             return queryset
 
         return Lote.objects.all()
+
+
+class BarrilView(LoginRequiredMixin, ListView):
+    """
+    vista genérica basada en clases para listar barriles
+    """
+    model = Barril
+    paginate_by = 10
+    context_object_name = 'barriles'
+    template_name = 'barrillist.html'
+
+    # search bar
+    def get_queryset(self):
+        if self.request.GET.get("q"):
+            queryset = Barril.objects.filter(
+                barril_nro__icontains=self.request.GET.get("q"))
+            return queryset
+
+        return Barril.objects.all()
+
+
+class MovimientosBarrilView(LoginRequiredMixin, ListView):
+    """
+    vista genérica basada en clases para listar barriles
+    """
+    model = MovimientosBarril
+    paginate_by = 10
+    context_object_name = 'movimientos'
+    template_name = 'movimientoslist.html'
+
+    # search bar
+    def get_queryset(self):
+        if self.request.GET.get("q"):
+            queryset = MovimientosBarril.objects.filter(
+                barril__barril_nro__icontains=self.request.GET.get("q"))
+            return queryset
+
+        if self.request.GET.get("l"):
+            queryset = MovimientosBarril.objects.filter(
+                lote__lote_nro__icontains=self.request.GET.get("l"))
+            return queryset
+
+        if self.kwargs.get("lote"):
+            queryset = MovimientosBarril.objects.filter(
+                lote__lote_nro__icontains=self.request.GET.get("lote"))
+            return queryset
+
+        return MovimientosBarril.objects.all()
 
 
 class BatchMaceracionCoccionlist(LoginRequiredMixin, UpdateView):
@@ -98,6 +143,25 @@ class LoteCreate(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('lote_seguimientos_list',
                        kwargs={'pk': self.object.lote_nro})
+
+
+class BarrilCreate(LoginRequiredMixin, CreateView):
+    model = Barril
+    form_class = BarrilModelForm
+    template_name = 'barril_form.html'
+
+    def get_success_url(self):
+        return reverse('barrillist')
+        # kwargs={'pk': self.object.lote_nro})
+
+
+class MovimientosBarrilCreate(LoginRequiredMixin, CreateView):
+    model = MovimientosBarril
+    form_class = MovimientosBarrilModelForm
+    template_name = 'movimientos_form.html'
+
+    def get_success_url(self):
+        return reverse('movimientoslist')
 
 
 class FermentacionUpdate(LoginRequiredMixin, UpdateView):

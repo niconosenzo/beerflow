@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form }}
+    </table>
+    <input type="submit" class="btn btn-primary" name="submit" value="Crear">
+
+</form>
+
+<script>
+  $(function () {
+    $("#id_fecha").datepicker({
+      format:'yyyy-mm-dd',
+      startDate: 'today',
+    });
+    $("#id_egresa").datepicker({
+      format:'yyyy-mm-dd',
+      startDate: 'today',
+    });
+    $("#id_ingresa").datepicker({
+      format:'yyyy-mm-dd',
+      startDate: 'today',
+    });
+  });
+
+</script>
+{% endblock %}

@@ -20,7 +20,9 @@ from .models import (
     InoculacionLevadura,
     RegistroFermentacion,
     AdicionCoccion,
-    RegistroClarificacionFiltracion
+    RegistroClarificacionFiltracion,
+    Barril,
+    MovimientosBarril
 )
 
 
@@ -76,6 +78,38 @@ class LoteModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(LoteModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class BarrilModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Barril
+        fields = ['barril_nro', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(BarrilModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class MovimientosBarrilModelForm(forms.ModelForm):
+
+    fecha = forms.DateField(input_formats=['%Y-%m-%d'])
+    ingresa = forms.DateField(input_formats=['%Y-%m-%d'])
+    egresa = forms.DateField(input_formats=['%Y-%m-%d'])
+
+    class Meta:
+        model = MovimientosBarril
+        fields = ['fecha', 'barril', 'lote', 'cliente', 'ingresa', 'egresa']
+
+    def __init__(self, *args, **kwargs):
+        super(MovimientosBarrilModelForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'

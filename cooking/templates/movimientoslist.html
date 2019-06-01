@@ -1,34 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
+{% block title %}<title>Schuam - Lista de Barriles</title>{% endblock %}
 
 
 
 {% block content %}
     {% block searcher %}
       <form method='GET' action=''>
-      <input class="form-control form-control-dark w-100" name='q' type="text" placeholder="Buscar por número de lote" aria-label="Search">
+      <input class="form-control form-control-dark w-100" name='q' type="text" placeholder="Buscar por identificador de barril" aria-label="Search">
       </form>
       <br>
+      <form method='GET' action=''>
+      <input class="form-control form-control-dark w-100" name='l' type="text" placeholder="Buscar por número de lote" aria-label="Search">
+      </form>
+      <br>
+<a href="{% url 'movimientoslist' %}">Listar Todos</a>
     {% endblock %}
-      <h2>Lista de lotes</h2>
+      <h2>Lista de Movimientos</h2>
       <p>Más reciente primero</p>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
             <tr>
+              <th>Fecha:</th>
+              <th>Barril Nro:</th>
               <th>Lote Nro:</th>
-              <th>Fecha Agregado:</th>
-              <th>Observaciones:</th>
+              <th>Cliente</th>
+              <th>Ingresa:</th>
+              <th>Egresa:</th>
             </tr>
           </thead>
           <tbody>
-          {% if lotes %}
-            {% for lote in lotes %}
+          {% if movimientos %}
+            {% for movimiento in movimientos %}
             <tr>
-                <td><a href="{% url 'lote_seguimientos_list' lote.lote_nro %}">{{ lote.lote_nro }}</td>
-                <td>{{ lote.fecha_creacion }}</td>
-                <td>{{ lote.observaciones }}</td>
+                <td>{{ movimiento.fecha }}</td>
+                <td><a href="#">{{ movimiento.barril }}</td>
+                <td><a href="#">{{ movimiento.lote }}</td>
+                <td>{{ movimiento.cliente }}</td>
+                <td>{{ movimiento.ingresa }}</td>
+                <td>{{ movimiento.egresa }}</td>
             </tr>
             {% endfor %}
           {% endif %}

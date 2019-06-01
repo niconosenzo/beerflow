@@ -24,6 +24,45 @@ class Lote(models.Model):
         return str(self.lote_nro)
 
 
+class Barril(models.Model):
+    """
+    Modelo que representa un lote
+    """
+    barril_nro = models.CharField(max_length=20,
+                                  help_text="ID barril, debe ser unico",
+                                  primary_key=True, null=False)
+    observaciones = models.TextField(max_length=100,
+                                     null=True, blank=True)
+    fecha_agregado = models.DateTimeField(auto_now_add=True)
+    # listamos los lotes con el mas reciente primero
+
+    class Meta:
+        ordering = ["-fecha_agregado"]
+
+    def __str__(self):
+        return str(self.barril_nro)
+
+
+class MovimientosBarril(models.Model):
+    """
+    Modelo para registrar movientos de un barrir para un lote determinado
+    """
+    fecha = models.DateField()
+    barril = models.ForeignKey(
+        'Barril', on_delete=models.CASCADE, null=True)
+    lote = models.ForeignKey(
+        'Lote', on_delete=models.CASCADE, null=True)
+    cliente = models.CharField(max_length=20,
+                               help_text="Cliente, obligatorio")
+    ingresa = models.DateField(null=True, blank=True)
+    egresa = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        mov = "Movimiento de barril " + \
+            str(self.barril) + " - lote " + str(self.lote)
+        return mov
+
+
 # PLANILLA MACERACION COCCION
 
 class SeguimientoMaceracionCoccion(models.Model):

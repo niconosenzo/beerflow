@@ -58,6 +58,9 @@
         <a href="#">Crear Planilla Carbonatación</a>
     </div>
     {% endif %}
+    <div class="col-sm-6 col-sm-offset-3">
+        <a href="{% url 'movimientoslistlote' lote.lote_nro %}">Movimientos para este lote. </a>
+    </div>
 
 
 {% endblock %}

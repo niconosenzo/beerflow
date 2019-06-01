@@ -27,14 +27,32 @@
                       </a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#"  style="color:white">
+                      <a class="nav-link" href="{% url 'barrillist' %}"  style="color:white">
                         Barriles
                       </a>
                   </li>
                   <li class="nav-item">
                       <li class="nav-item">
+                          <a class="nav-link" href="{% url 'movimientoslist' %}"  style="color:white">
+                         Movimientos
+                       </a>
+                  </li>
+                  <li class="nav-item">
+                      <li class="nav-item">
                           <a class="nav-link" href="{% url 'lote_create' %}"  style="color:white">
                          Nuevo Lote
+                       </a>
+                  </li>
+                  <li class="nav-item">
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'barril_create' %}"  style="color:white">
+                         Nuevo Barril
+                       </a>
+                  </li>
+                  <li class="nav-item">
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'movimiento_create' %}"  style="color:white">
+                         Nuevo Movimiento
                        </a>
                   </li>
                   {% if user.is_authenticated %}
