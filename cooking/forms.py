@@ -28,7 +28,9 @@ from .models import (
 
 class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
     fecha_inicio = forms.DateField(disabled=True)
+    fecha_inicio.widget.attrs.update({'autocomplete': 'off'})
     fecha_fin = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha_fin.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = SeguimientoMaceracionCoccion
@@ -321,7 +323,9 @@ AdicionEtapaCoccionFormset = inlineformset_factory(Coccion, AdicionCoccion,
 class SeguimientoFermentacionModelForm(forms.ModelForm):
     # fecha_llenado = forms.DateField(widget=forms.SelectDateWidget())
     fecha_llenado = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha_llenado.widget.attrs.update({'autocomplete': 'off'})
     fecha_inoculacion_levadura = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha_inoculacion_levadura.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = SeguimientoFermentacion
@@ -339,6 +343,7 @@ class SeguimientoFermentacionModelForm(forms.ModelForm):
 class RegistroFermentacionModelForm(forms.ModelForm):
 
     fecha = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = RegistroFermentacion
