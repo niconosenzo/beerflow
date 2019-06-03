@@ -199,7 +199,6 @@ class BarrilCreate(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('barrillist')
-        # kwargs={'pk': self.object.lote_nro})
 
 
 class MovimientosBarrilCreate(LoginRequiredMixin, CreateView):

@@ -3,6 +3,11 @@ from . import views
 
 
 urlpatterns = [
+    # Create object URLs
+    url(r'^lote/create/$', views.LoteCreate.as_view(), name='lote_create'),
+    url(r'^barril/create/$', views.BarrilCreate.as_view(), name='barril_create'),
+    url(r'^movimiento/create/$', views.MovimientosBarrilCreate.as_view(),
+        name='movimiento_create'),
     url(r'^$', views.LoteView.as_view(), name='lotelist'),
     url(r'^lote/$', views.LoteView.as_view(), name='lotelist'),
     url(r'^barril/$', views.BarrilView.as_view(), name='barrillist'),
@@ -14,15 +19,12 @@ urlpatterns = [
         name='movimientoslistbarril'),
     url(r'^lote/(?P<pk>\d+)$', views.LoteSeguimientosView.as_view(),
         name='lote_seguimientos_list'),
-    url(r'^movimientoUpdate/(?P<pk>\d+)/$', views.UpdateMovimientosBarrilView.as_view(),
+    url(r'^movimiento/update/(?P<pk>\d+)/$', views.UpdateMovimientosBarrilView.as_view(),
         name='movimientosupdate'),
 ]
 
 urlpatterns += [
-    url(r'^lote/create/$', views.LoteCreate.as_view(), name='lote_create'),
-    url(r'^barril/create/$', views.BarrilCreate.as_view(), name='barril_create'),
-    url(r'^movimiento/create/$', views.MovimientosBarrilCreate.as_view(),
-        name='movimiento_create'),
+    # Planillas
     url(r'^lote/(?P<pk>\d+)/BatchMaceracionCoccion/$',
         views.BatchMaceracionCoccionlist.as_view(),
         name='batch_maceracion_coccion_list'),
