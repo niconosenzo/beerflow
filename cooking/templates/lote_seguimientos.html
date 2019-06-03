@@ -4,12 +4,42 @@
 
 {% block content %}
 
-    <h3>Seguimientos presentes para este lote:</h3>
+    <h2>Seguimientos presentes para este lote:</h2>
     <br>
 
     <!-- Check if there is not a "seguimiento*" object created for a lote, if not, we ask to create one-->
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Nombre Planilla:</th>
+            <th>Fecha Creación:</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% if  seguimiento_maceracion_coccion %}
+          <tr>
+              {% for innerseguimiento in seguimiento_maceracion_coccion %}
+                  <td > <a href = "{% url 'batch_maceracion_coccion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }}</td>
+                  <td>{{ innerseguimiento.fecha_inicio }} </td>
+              {% endfor %}
+          </tr>
+         {% endif %}
+         {% if  seguimiento_fermentacion %}
+           <tr>
+               {% for innerseguimiento in seguimiento_fermentacion %}
+                   <td > <a href = "{% url 'fermentacion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }}</td>
+                   <td>{{ innerseguimiento.fecha_inicio }} </td>
+               {% endfor %}
+           </tr>
+          {% endif %}
 
-    {% if not seguimiento_maceracion_coccion %}
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- {% if not seguimiento_maceracion_coccion %}
     <div class="col-sm-6 col-sm-offset-3">
         <a href="{% url 'maceracion_coccion_create' lote.lote_nro %}">Crear Planilla Maceracion / Coccion</a>
     </div>
@@ -20,9 +50,9 @@
                     <label for = fechainico > --Fecha de creación: {{ innerseguimiento.fecha_inicio }} - - </label>
             {% endfor %}
         </div>
-    {% endif %}
+    {% endif %} -->
 
-    {% if not seguimiento_fermentacion %}
+    <!-- {% if not seguimiento_fermentacion %}
     <div class="col-sm-6 col-sm-offset-3">
         <a href="{% url 'fermentacion_create' lote.lote_nro %} ">Crear Planilla Fermentación </a>
     </div>
@@ -33,25 +63,36 @@
                     <label for = fechainico > --Fecha de creación: {{ innerseguimiento.fecha_inicio }} - - </label>
             {% endfor %}
         </div>
+    {% endif %} -->
+
+    <br><br>
+    {% if not seguimiento_maceracion_coccion %}
+    <div class="col-sm-6 col-sm-offset-3">
+        <a href="{% url 'maceracion_coccion_create' lote.lote_nro %}">- Crear Planilla Maceracion / Coccion</a>
+    </div>
+    {% endif %}
+
+    {% if not seguimiento_fermentacion %}
+    <div class="col-sm-6 col-sm-offset-3">
+        <a href="{% url 'fermentacion_create' lote.lote_nro %}">- Crear Planilla Fermentación </a>
+    </div>
     {% endif %}
 
     {% if not seguimiento_clarificacion_filtracion %}
     <div class="col-sm-6 col-sm-offset-3">
-        <a href="#">Crear Planilla Clarificación / Filtración </a>
+        <a href="#">- Crear Planilla Clarificación / Filtración </a>
     </div>
     {% endif %}
 
     {% if not seguimiento_carbonatacion %}
     <div class="col-sm-6 col-sm-offset-3">
-        <a href="#">Crear Planilla Carbonatación</a>
+        <a href="#">- Crear Planilla Carbonatación</a>
     </div>
     {% endif %}
-
-    <br>
-    <h3>Movimiento de barriles relacionados a este lote</h3>
-    <br>
     <div class="col-sm-6 col-sm-offset-3">
+        <B>
         <a href="{% url 'movimientoslistlote' lote.lote_nro %}">Movimientos para este lote. </a>
+        </b>
     </div>
 
 
