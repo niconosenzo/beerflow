@@ -26,7 +26,7 @@
           {% if barriles %}
             {% for barril in barriles %}
             <tr>
-                <td><a href="#">{{ barril.barril_nro }}</td>
+                <td><a href="{% url 'movimientoslistbarril' barril.barril_nro %}">{{ barril.barril_nro }}</td>
                 <td>{{ barril.fecha_agregado }}</td>
                 <td>{{ barril.observaciones }}</td>
             </tr>

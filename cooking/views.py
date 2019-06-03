@@ -107,6 +107,22 @@ class LoteMovimientosBarrilView(LoginRequiredMixin, ListView):
         return queryset
 
 
+class BarrilMovimientosBarrilView(LoginRequiredMixin, ListView):
+    """
+    vista genérica basada en clases para listar movimientos
+    para un barril determinado
+    """
+    model = MovimientosBarril
+    paginate_by = 10
+    context_object_name = 'movimientos'
+    template_name = 'movimientoslist.html'
+
+    def get_queryset(self):
+        queryset = MovimientosBarril.objects.filter(
+            barril__barril_nro__icontains=self.kwargs['barril'])
+        return queryset
+
+
 class BatchMaceracionCoccionlist(LoginRequiredMixin, UpdateView):
     """
     VBC que lista primer y segundo Batch tanto para maceracion

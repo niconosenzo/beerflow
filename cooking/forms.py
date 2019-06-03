@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.forms import ModelForm, Textarea
 import datetime
 from django.contrib.admin import widgets
@@ -29,7 +30,7 @@ from .models import (
 class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
     fecha_inicio = forms.DateField(disabled=True)
     fecha_inicio.widget.attrs.update({'autocomplete': 'off'})
-    fecha_fin = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha_fin = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     fecha_fin.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
@@ -102,11 +103,13 @@ class BarrilModelForm(forms.ModelForm):
 
 class MovimientosBarrilModelForm(forms.ModelForm):
 
-    fecha = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     fecha.widget.attrs.update({'autocomplete': 'off'})
-    ingresa = forms.DateField(required=False, input_formats=['%Y-%m-%d'])
+    ingresa = forms.DateField(
+        required=False, input_formats=settings.DATE_INPUT_FORMATS)
     ingresa.widget.attrs.update({'autocomplete': 'off', 'required': 'False'})
-    egresa = forms.DateField(required=False, input_formats=['%Y-%m-%d'])
+    egresa = forms.DateField(
+        required=False, input_formats=settings.DATE_INPUT_FORMATS)
     egresa.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
@@ -322,9 +325,10 @@ AdicionEtapaCoccionFormset = inlineformset_factory(Coccion, AdicionCoccion,
 
 class SeguimientoFermentacionModelForm(forms.ModelForm):
     # fecha_llenado = forms.DateField(widget=forms.SelectDateWidget())
-    fecha_llenado = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha_llenado = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     fecha_llenado.widget.attrs.update({'autocomplete': 'off'})
-    fecha_inoculacion_levadura = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha_inoculacion_levadura = forms.DateField(
+        input_formats=settings.DATE_INPUT_FORMATS)
     fecha_inoculacion_levadura.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
@@ -342,7 +346,7 @@ class SeguimientoFermentacionModelForm(forms.ModelForm):
 
 class RegistroFermentacionModelForm(forms.ModelForm):
 
-    fecha = forms.DateField(input_formats=['%Y-%m-%d'])
+    fecha = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     fecha.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:

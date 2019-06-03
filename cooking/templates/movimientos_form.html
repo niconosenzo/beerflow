@@ -7,22 +7,22 @@
     <table>
     {{ form }}
     </table>
-    <input type="submit" class="btn btn-primary" name="submit" value="Crear">
+    <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
 
 </form>
 
 <script>
   $(function () {
     $("#id_fecha").datepicker({
-      format:'yyyy-mm-dd',
+      format:'dd/mm/yyyy',
       startDate: 'today',
     });
     $("#id_egresa").datepicker({
-      format:'yyyy-mm-dd',
+      format:'dd/mm/yyyy',
       startDate: 'today',
     });
     $("#id_ingresa").datepicker({
-      format:'yyyy-mm-dd',
+      format:'dd/mm/yyyy',
       startDate: 'today',
     });
   });
