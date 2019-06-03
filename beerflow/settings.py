@@ -26,7 +26,8 @@ SECRET_KEY = '&c8f_v3z-dk1$(jd4+limqx%9du_(qopmscjgz+dxtnjwtqq6$'
 DEBUG = True
 
 #ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.0/24']
-ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname()), ]
+ALLOWED_HOSTS = [gethostname(), gethostbyname(
+    gethostname()), 'schuam.pythonanywhere.com']
 
 
 # Application definition
