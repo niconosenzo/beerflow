@@ -14,10 +14,17 @@
       <input class="form-control form-control-dark w-100" name='l' type="text" placeholder="Buscar por número de lote" aria-label="Search">
       </form>
       <br>
+      {% if barrilsearch %}
+        <p>
+            <B>Movimientos para barril {{ barrilsearch }}</b>
+        </p>
+      {% endif %}
 <a href="{% url 'movimientoslist' %}">Listar Todos</a>
     {% endblock %}
       <h2>Lista de Movimientos</h2>
-      <p>Más reciente primero</p>
+      <p>
+          <CITE>Más reciente primero</cite>
+      </p>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>

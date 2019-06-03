@@ -122,6 +122,12 @@ class BarrilMovimientosBarrilView(LoginRequiredMixin, ListView):
             barril__barril_nro__icontains=self.kwargs['barril'])
         return queryset
 
+    def get_context_data(self, **kwargs):
+            # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['barrilsearch'] = self.kwargs['barril']
+        return context
+
 
 class BatchMaceracionCoccionlist(LoginRequiredMixin, UpdateView):
     """
