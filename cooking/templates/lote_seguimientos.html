@@ -3,9 +3,9 @@
 {% block title %}<title>Schuam - Lista de lotes</title>{% endblock %}
 
 {% block content %}
+
     <h3>Seguimientos presentes para este lote:</h3>
     <br>
-
 
     <!-- Check if there is not a "seguimiento*" object created for a lote, if not, we ask to create one-->
 
@@ -46,6 +46,12 @@
         <a href="#">Crear Planilla Carbonatación</a>
     </div>
     {% endif %}
+    <div class="col-sm-6 col-sm-offset-3">
+        <a href="{% url 'movimientoslistlote' lote.lote_nro %}">Movimientos para este lote. </a>
+    </div>
+    <br>
+    <h3>Movimiento de barriles relacionados a este lote</h3>
+    <br>
     <div class="col-sm-6 col-sm-offset-3">
         <a href="{% url 'movimientoslistlote' lote.lote_nro %}">Movimientos para este lote. </a>
     </div>

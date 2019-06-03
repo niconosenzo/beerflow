@@ -14,11 +14,19 @@
       <input class="form-control form-control-dark w-100" name='l' type="text" placeholder="Buscar por número de lote" aria-label="Search">
       </form>
       <br>
+      <!-- Si llamamos este template desde BarrilMovimientosBarrilView: -->
       {% if barrilsearch %}
         <p>
             <B>Movimientos para barril {{ barrilsearch }}</b>
         </p>
       {% endif %}
+      <!-- Si llamamos este template desde LoteMovimientosBarrilView -->
+      {% if lotesearch %}
+        <p>
+            <B>Movimientos para lote {{ lotesearch }}</b>
+        </p>
+      {% endif %}
+
 <a href="{% url 'movimientoslist' %}">Listar Todos</a>
     {% endblock %}
       <h2>Lista de Movimientos</h2>

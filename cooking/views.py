@@ -106,6 +106,12 @@ class LoteMovimientosBarrilView(LoginRequiredMixin, ListView):
             lote__lote_nro__icontains=self.kwargs['lote'])
         return queryset
 
+    def get_context_data(self, **kwargs):
+            # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['lotesearch'] = self.kwargs['lote']
+        return context
+
 
 class BarrilMovimientosBarrilView(LoginRequiredMixin, ListView):
     """
