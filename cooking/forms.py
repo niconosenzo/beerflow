@@ -114,7 +114,8 @@ class MovimientosBarrilModelForm(forms.ModelForm):
 
     class Meta:
         model = MovimientosBarril
-        fields = ['fecha', 'barril', 'lote', 'cliente', 'ingresa', 'egresa']
+        fields = ['fecha', 'barril', 'lote', 'cliente',
+                  'ingresa', 'egresa', 'estado_devolucion']
 
     def __init__(self, *args, **kwargs):
         super(MovimientosBarrilModelForm, self).__init__(*args, **kwargs)

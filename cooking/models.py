@@ -3,7 +3,6 @@ from django.db import models
 from .utils import constants
 from datetime import time
 
-
 # Create your models here.
 
 
@@ -35,6 +34,7 @@ class Barril(models.Model):
     observaciones = models.TextField(max_length=100,
                                      null=True, blank=True)
     fecha_agregado = models.DateTimeField(auto_now_add=True)
+
     # listamos los lotes con el mas reciente primero
 
     class Meta:
@@ -57,6 +57,9 @@ class MovimientosBarril(models.Model):
                                help_text="Cliente, obligatorio")
     ingresa = models.DateField(null=True, blank=True)
     egresa = models.DateField(null=True, blank=True)
+    estado_devolucion = models.CharField(max_length=20,
+                                         choices=constants.DEVOLUCION,
+                                         null=True, blank=True)
 
     class Meta:
         ordering = ["-fecha"]
@@ -314,6 +317,11 @@ class SeguimientoClarificacionFiltracion(models.Model):
 
 
 class RegistroClarificacionFiltracion(models.Model):
+
+    class Meta:
+        verbose_name = "Registro Clarificación y Filtración"
+        verbose_name_plural = "Registros de Clarificación y Filtración"
+
     seguimiento_control_clarificacion_filtracion = models.ForeignKey(
         'SeguimientoClarificacionFiltracion', on_delete=models.CASCADE, null=True)
     orden = models.PositiveIntegerField(null=True, blank=True)

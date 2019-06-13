@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     # Create object URLs
     url(r'^lote/create/$', views.LoteCreate.as_view(), name='lote_create'),
-    url(r'^barril/create/$', views.BarrilCreate.as_view(), name='barril_create'),
+    url(r'^barril/create/$', views.BarrilCreate.as_view(),
+        name='barril_create'),
     url(r'^movimiento/create/$', views.MovimientosBarrilCreate.as_view(),
         name='movimiento_create'),
     url(r'^$', views.LoteView.as_view(), name='lotelist'),
@@ -13,14 +14,20 @@ urlpatterns = [
     url(r'^barril/$', views.BarrilView.as_view(), name='barrillist'),
     url(r'^movimiento/$', views.MovimientosBarrilView.as_view(),
         name='movimientoslist'),
-    url(r'^movimiento/(?P<lote>\d+)', views.LoteMovimientosBarrilView.as_view(),
+    url(r'^movimiento/(?P<lote>\d+)',
+        views.LoteMovimientosBarrilView.as_view(),
         name='movimientoslistlote'),
-    url(r'^movimiento/(?P<barril>[-\w]+)/$', views.BarrilMovimientosBarrilView.as_view(),
+    url(r'^movimiento/(?P<barril>[-\w]+)/$',
+        views.BarrilMovimientosBarrilView.as_view(),
         name='movimientoslistbarril'),
     url(r'^lote/(?P<pk>\d+)$', views.LoteSeguimientosView.as_view(),
         name='lote_seguimientos_list'),
-    url(r'^movimiento/update/(?P<pk>\d+)/$', views.UpdateMovimientosBarrilView.as_view(),
+    url(r'^movimiento/update/(?P<pk>\d+)/$',
+        views.UpdateMovimientosBarrilView.as_view(),
         name='movimientosupdate'),
+    url(r'^movimiento/ingresarbarril/(?P<slug>[-\w]+)/$',
+        views.IngresarMovimientosBarrilView.as_view(),
+        name='movimientosingreso'),
 ]
 
 urlpatterns += [

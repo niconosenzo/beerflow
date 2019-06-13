@@ -43,6 +43,7 @@
               <th>Cliente</th>
               <th>Ingresa:</th>
               <th>Egresa:</th>
+              <th>Estado:</th>
               <th></th>
             </tr>
           </thead>
@@ -56,7 +57,16 @@
                 <td><a href="{% url 'lote_seguimientos_list' movimiento.lote.lote_nro %}">{{ movimiento.lote }}</td>
                 <td>{{ movimiento.cliente }}</td>
                 <td>{{ movimiento.ingresa }}</td>
+                {% if movimiento.egresa is None %}
+                    <td>Sin fecha de egreso.</td>
+                {% else %}
                 <td>{{ movimiento.egresa }}</td>
+                {% endif %}
+                {% if movimiento.estado_devolucion is None %}
+                    <td>Sin estado devolución.</td>
+                {% else %}
+                <td>{{ movimiento.estado_devolucion }}</td>
+                {% endif %}
                 <td><a href="{% url 'movimientosupdate' movimiento.id %}">Actualizar</td>
 
             </tr>

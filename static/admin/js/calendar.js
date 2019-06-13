@@ -9,27 +9,27 @@ depends on core.js for utility functions like removeChildren or quickElement
     // CalendarNamespace -- Provides a collection of HTML calendar-related helper functions
     var CalendarNamespace = {
         monthsOfYear: [
-            gettext('January'),
-            gettext('February'),
-            gettext('March'),
-            gettext('April'),
-            gettext('May'),
-            gettext('June'),
-            gettext('July'),
-            gettext('August'),
-            gettext('September'),
-            gettext('October'),
-            gettext('November'),
-            gettext('December')
+            gettext('Enero'),
+            gettext('Febrero'),
+            gettext('Marzo'),
+            gettext('Abril'),
+            gettext('Mayo'),
+            gettext('Junio'),
+            gettext('Julio'),
+            gettext('Agosto'),
+            gettext('Septiembre'),
+            gettext('Octubre'),
+            gettext('Noviembre'),
+            gettext('Deciembre')
         ],
         daysOfWeek: [
-            pgettext('one letter Sunday', 'S'),
-            pgettext('one letter Monday', 'M'),
-            pgettext('one letter Tuesday', 'T'),
-            pgettext('one letter Wednesday', 'W'),
-            pgettext('one letter Thursday', 'T'),
-            pgettext('one letter Friday', 'F'),
-            pgettext('one letter Saturday', 'S')
+            pgettext('one letter Domingo', 'D'),
+            pgettext('one letter Lunes', 'L'),
+            pgettext('one letter Martes', 'M'),
+            pgettext('one letter Miercoles', 'I'),
+            pgettext('one letter Jueves', 'J'),
+            pgettext('one letter Viernes', 'V'),
+            pgettext('one letter Sabado', 'S')
         ],
         firstDayOfWeek: parseInt(get_format('FIRST_DAY_OF_WEEK')),
         isLeapYear: function(year) {

@@ -3,13 +3,14 @@ from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse, reverse_lazy
 from .forms import *
 from .initializers import (
     init_planilla_MaceracionCoccion,
     init_planilla_Fermentacion)
 from django.contrib import messages
+from datetime import date
 
 
 # Create your views here.
@@ -86,6 +87,36 @@ class UpdateMovimientosBarrilView(LoginRequiredMixin, UpdateView):
     model = MovimientosBarril
     form_class = MovimientosBarrilModelForm
     template_name = 'movimientos_form.html'
+
+    def get_success_url(self):
+        return reverse('movimientoslist')
+
+
+class IngresarMovimientosBarrilView(LoginRequiredMixin, UpdateView):
+    """
+    se llama a esta clase cuando un se escanea un código QR, entonces se
+    verifica si el barril tiene un movimiento para el que no haya fecha de
+    ingreso, se llena automaticamente y se muestra el movimiento para
+    actualizar el estado de devolución
+    """
+
+    model = MovimientosBarril
+    form_class = MovimientosBarrilModelForm
+    template_name = 'movimientos_form.html'
+
+    def get_initial(self):
+        initial = super(IngresarMovimientosBarrilView, self).get_initial()
+        initial['egresa'] = date.today
+        return initial
+
+    def get_object(self, **kwargs):
+        # return get_object_or_404(MovimientosBarril, barril=Barril.objects.get(barril_nro=self.kwargs.get("slug")))
+        mov = MovimientosBarril.objects.filter(
+            barril__barril_nro__icontains=self.kwargs['slug']).first()
+        if mov is None:
+            raise Http404
+        else:
+            return mov
 
     def get_success_url(self):
         return reverse('movimientoslist')
