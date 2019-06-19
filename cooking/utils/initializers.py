@@ -1,4 +1,4 @@
-from .models import *
+from ..models import *
 import datetime
 
 
@@ -10,8 +10,7 @@ def init_planilla_MaceracionCoccion(pk):
      """
     # seguimiento maceracion
     seguimiento_maceracion_coccion = SeguimientoMaceracionCoccion(
-        lote=Lote.objects.get(lote_nro=pk),
-        fecha_inicio=datetime.date.today())
+        lote=Lote.objects.get(lote_nro=pk))
     seguimiento_maceracion_coccion.save()
 
     # maceracion
@@ -81,8 +80,7 @@ def init_planilla_MaceracionCoccion(pk):
 def init_planilla_Fermentacion(pk):
     # seguimiento fermentacion
     seguimiento_fermentacion = SeguimientoFermentacion(
-        lote=Lote.objects.get(lote_nro=pk),
-        fecha_inicio=datetime.date.today())
+        lote=Lote.objects.get(lote_nro=pk))
     seguimiento_fermentacion.save()
 
     # parametros fundamentales

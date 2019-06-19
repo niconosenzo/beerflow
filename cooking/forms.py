@@ -28,14 +28,14 @@ from .models import (
 
 
 class SeguimientoMaceracionCoccionModelForm(forms.ModelForm):
-    fecha_inicio = forms.DateField(disabled=True)
-    fecha_inicio.widget.attrs.update({'autocomplete': 'off'})
+    #fecha_inicio = forms.DateField(disabled=True)
+    #fecha_inicio.widget.attrs.update({'autocomplete': 'off'})
     fecha_fin = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     fecha_fin.widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = SeguimientoMaceracionCoccion
-        fields = ['fecha_inicio', 'fecha_fin', 'observaciones']
+        fields = ['fecha_fin', 'observaciones']
 
     def __init__(self, *args, **kwargs):
         super(SeguimientoMaceracionCoccionModelForm,
@@ -103,8 +103,8 @@ class BarrilModelForm(forms.ModelForm):
 
 class MovimientosBarrilModelForm(forms.ModelForm):
 
-    fecha = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
-    fecha.widget.attrs.update({'autocomplete': 'off'})
+    #fecha_creacion = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    #fecha_creacion.widget.attrs.update({'autocomplete': 'off'})
     ingresa = forms.DateField(
         required=False, input_formats=settings.DATE_INPUT_FORMATS)
     ingresa.widget.attrs.update({'autocomplete': 'off', 'required': 'False'})
@@ -114,7 +114,7 @@ class MovimientosBarrilModelForm(forms.ModelForm):
 
     class Meta:
         model = MovimientosBarril
-        fields = ['fecha', 'barril', 'lote', 'cliente',
+        fields = ['barril', 'lote', 'cliente',
                   'ingresa', 'egresa', 'estado_devolucion']
 
     def __init__(self, *args, **kwargs):

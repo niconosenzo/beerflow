@@ -21,7 +21,7 @@
           <tr>
               {% for innerseguimiento in seguimiento_maceracion_coccion %}
                   <td > <a href = "{% url 'batch_maceracion_coccion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }}</td>
-                  <td>{{ innerseguimiento.fecha_inicio }} </td>
+                  <td>{{ innerseguimiento.fecha_creacion }} </td>
               {% endfor %}
           </tr>
          {% endif %}
@@ -29,7 +29,7 @@
            <tr>
                {% for innerseguimiento in seguimiento_fermentacion %}
                    <td > <a href = "{% url 'fermentacion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }}</td>
-                   <td>{{ innerseguimiento.fecha_inicio }} </td>
+                   <td>{{ innerseguimiento.fecha_creacion }} </td>
                {% endfor %}
            </tr>
           {% endif %}
@@ -38,32 +38,6 @@
       </table>
     </div>
 
-
-    <!-- {% if not seguimiento_maceracion_coccion %}
-    <div class="col-sm-6 col-sm-offset-3">
-        <a href="{% url 'maceracion_coccion_create' lote.lote_nro %}">Crear Planilla Maceracion / Coccion</a>
-    </div>
-    {% else %}
-        <div class = "table-responsive">
-            {% for innerseguimiento in seguimiento_maceracion_coccion %}
-                <caption > <a href = "{% url 'batch_maceracion_coccion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }} </a> </caption>
-                    <label for = fechainico > --Fecha de creación: {{ innerseguimiento.fecha_inicio }} - - </label>
-            {% endfor %}
-        </div>
-    {% endif %} -->
-
-    <!-- {% if not seguimiento_fermentacion %}
-    <div class="col-sm-6 col-sm-offset-3">
-        <a href="{% url 'fermentacion_create' lote.lote_nro %} ">Crear Planilla Fermentación </a>
-    </div>
-    {% else %}
-        <div class = "table-responsive">
-            {% for innerseguimiento in seguimiento_fermentacion %}
-                <caption > <a href = "{% url 'fermentacion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }} </a> </caption>
-                    <label for = fechainico > --Fecha de creación: {{ innerseguimiento.fecha_inicio }} - - </label>
-            {% endfor %}
-        </div>
-    {% endif %} -->
 
     <br><br>
     {% if not seguimiento_maceracion_coccion %}

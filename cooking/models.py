@@ -1,12 +1,14 @@
 
 from django.db import models
 from .utils import constants
+from .utils.models import CreationModificationDateMixin
 from datetime import time
+
 
 # Create your models here.
 
 
-class Lote(models.Model):
+class Lote(CreationModificationDateMixin):
     """
     Modelo que representa un lote
     """
@@ -14,7 +16,7 @@ class Lote(models.Model):
                                            primary_key=True, null=False)
     observaciones = models.TextField(max_length=100,
                                      null=True, blank=True)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    # fecha_creacion = models.DateTimeField(auto_now_add=True)
     # listamos los lotes con el mas reciente primero
 
     class Meta:
@@ -24,7 +26,7 @@ class Lote(models.Model):
         return str(self.lote_nro)
 
 
-class Barril(models.Model):
+class Barril(CreationModificationDateMixin):
     """
     Modelo que representa un lote
     """
@@ -33,22 +35,21 @@ class Barril(models.Model):
                                   primary_key=True, null=False)
     observaciones = models.TextField(max_length=100,
                                      null=True, blank=True)
-    fecha_agregado = models.DateTimeField(auto_now_add=True)
 
     # listamos los lotes con el mas reciente primero
 
     class Meta:
-        ordering = ["-fecha_agregado"]
+        ordering = ["-fecha_creacion"]
 
     def __str__(self):
         return str(self.barril_nro)
 
 
-class MovimientosBarril(models.Model):
+class MovimientosBarril(CreationModificationDateMixin):
     """
     Modelo para registrar movientos de un barrir para un lote determinado
     """
-    fecha = models.DateField()
+    # fecha = models.DateField()
     barril = models.ForeignKey(
         'Barril', on_delete=models.CASCADE, null=True)
     lote = models.ForeignKey(
@@ -62,7 +63,7 @@ class MovimientosBarril(models.Model):
                                          null=True, blank=True)
 
     class Meta:
-        ordering = ["-fecha"]
+        ordering = ["-fecha_creacion"]
 
     def __str__(self):
         mov = "Movimiento de barril " + \
@@ -72,14 +73,14 @@ class MovimientosBarril(models.Model):
 
 # PLANILLA MACERACION COCCION
 
-class SeguimientoMaceracionCoccion(models.Model):
+class SeguimientoMaceracionCoccion(CreationModificationDateMixin):
     """
     Primer proceso de la elaboración,
     se distingue todo el proceso por un ID unico, el lote_nro
     """
     lote = models.OneToOneField(
         Lote, on_delete=models.CASCADE, primary_key=True)
-    fecha_inicio = models.DateField(null=True, blank=True)
+    #fecha_inicio = models.DateField(null=True, blank=True)
     fecha_fin = models.DateField(null=True, blank=True)
     observaciones = models.TextField(
         max_length=100,  null=True, blank=True)
@@ -245,14 +246,18 @@ class ParametrosFundamentales(models.Model):
     observaciones = models.TextField(max_length=100, null=True, blank=True)
 
 
-class SeguimientoFermentacion(models.Model):
+class SeguimientoFermentacion(CreationModificationDateMixin):
     """
     Proceso de control de Fermentacion,
     se distingue todo el proceso por un ID unico, el lote_nro
     """
+    class Meta:
+        verbose_name = "Seguimiento de Fermentacion"
+        verbose_name_plural = "Seguimientos de Fermentacion"
+
     lote = models.OneToOneField(
         Lote, on_delete=models.CASCADE, primary_key=True)
-    fecha_inicio = models.DateField(null=True, blank=True)
+    #fecha_inicio = models.DateField(null=True, blank=True)
     vasija = models.CharField(max_length=10, null=True, blank=True)
     fecha_llenado = models.DateField(null=True, blank=True)
     litros = models.FloatField(null=True, blank=True)
@@ -268,6 +273,10 @@ class InoculacionLevadura(models.Model):
     Podría estar incluida en la misma Clase de seguimiento de Fermentación,
     pero se separa por su cantidad de atributos
     """
+    class Meta:
+        verbose_name = "Inoculación de Levadura"
+        verbose_name_plural = "Inoculaciones de Levadura"
+
     seguimiento_control_fermentacion = models.OneToOneField(
         SeguimientoFermentacion, on_delete=models.CASCADE)
     hora = models.TimeField(
@@ -284,6 +293,11 @@ class InoculacionLevadura(models.Model):
 
 
 class RegistroFermentacion(models.Model):
+
+    class Meta:
+        verbose_name = "Registro de Fermentación"
+        verbose_name_plural = "Registros de Fermentación"
+
     seguimiento_control_fermentacion = models.ForeignKey(
         'SeguimientoFermentacion', on_delete=models.CASCADE, null=True)
     fecha = models.DateField(null=True, blank=True)
@@ -306,6 +320,10 @@ class SeguimientoClarificacionFiltracion(models.Model):
     Proceso de control de Clarificación/Filtración,
     se distingue todo el proceso por un ID unico, el lote_nro
     """
+    class Meta:
+        verbose_name = "Seguimiento Clarificación y Filtración"
+        verbose_name_plural = "Seguimientos de Clarificación y Filtración"
+
     lote = models.OneToOneField(
         Lote, on_delete=models.CASCADE, primary_key=True)
     fecha = models.DateField(null=True, blank=True)

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse, reverse_lazy
 from .forms import *
-from .initializers import (
+from .utils.initializers import (
     init_planilla_MaceracionCoccion,
     init_planilla_Fermentacion)
 from django.contrib import messages

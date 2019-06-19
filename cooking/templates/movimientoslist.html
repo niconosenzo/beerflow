@@ -37,7 +37,7 @@
         <table class="table table-striped table-sm">
           <thead>
             <tr>
-              <th>Fecha:</th>
+              <th>Fecha Creación:</th>
               <th>Barril Nro:</th>
               <th>Lote Nro:</th>
               <th>Cliente</th>
@@ -52,7 +52,7 @@
           {% if movimientos %}
             {% for movimiento in movimientos %}
             <tr>
-                <td>{{ movimiento.fecha }}</td>
+                <td>{{ movimiento.fecha_creacion }}</td>
                 <td>{{ movimiento.barril }}</td>
                 <td><a href="{% url 'lote_seguimientos_list' movimiento.lote.lote_nro %}">{{ movimiento.lote }}</td>
                 <td>{{ movimiento.cliente }}</td>
