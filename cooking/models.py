@@ -347,7 +347,8 @@ class RegistroClarificacionFiltracion(models.Model):
     origen = models.CharField(max_length=20, null=True, blank=True)
     # WIP, Debe ser cambiado a FK a clase barril
     destino_barril = models.ForeignKey('Barril',
-                                       on_delete=models.CASCADE, null=True)
+                                       on_delete=models.CASCADE,
+                                       blank=True, null=True)
     hora_inicio = models.TimeField(
         choices=constants.HORA, null=True, blank=True)
     kg_fin = models.FloatField(null=True, blank=True)
