@@ -8,7 +8,8 @@ from django.urls import reverse, reverse_lazy
 from .forms import *
 from .utils.initializers import (
     init_planilla_MaceracionCoccion,
-    init_planilla_Fermentacion)
+    init_planilla_Fermentacion,
+    init_planilla_Clarificacion_Filtracion)
 from django.contrib import messages
 from datetime import date
 
@@ -444,6 +445,64 @@ class CoccionUpdate(LoginRequiredMixin, UpdateView):
         return context
 
 
+class ClarificacionFiltracionUpdate(LoginRequiredMixin, UpdateView):
+    """
+    VBC que lista los datos de seguimiento de Clarificacion/Filtracion
+    """
+    model = SeguimientoClarificacionFiltracion
+    template_name = 'seguimientos_clarificacion_filtracion.html'
+    form_class = SeguimientoClarificacionFiltracionModelForm
+
+    def get_success_url(self):
+        return reverse('clarificacion_filtracion_list',
+                       kwargs={'pk': self.object.lote.lote_nro})
+
+    def get_context_data(self, **kwargs):
+        context = super(ClarificacionFiltracionUpdate,
+                        self).get_context_data(**kwargs)
+
+        context['registro_clarificaion_filtracion_form_set'] = RegistroClarificacionFiltracionFormset(
+            self.request.POST or None, instance=self.object)
+
+        context['pk'] = self.kwargs.get("pk")
+        return context
+    #
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(SeguimientoClarificacionFiltracion,
+                                 lote=Lote.objects.get(
+                                     lote_nro=self.kwargs.get("pk"))
+                                 )
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+
+        registro_clarificaion_filtracion_form_set = context[
+            'registro_clarificaion_filtracion_form_set']
+        print(form.errors)
+        if form.is_valid():
+            self.object = form.save()
+            messages.success(
+                self.request, 'Planilla Clarificación/Filtración guardada')
+
+        print(registro_clarificaion_filtracion_form_set.errors)
+        if registro_clarificaion_filtracion_form_set.is_valid():
+            registro_clarificaion_filtracion_form_set.instance = self.object
+            registro_clarificaion_filtracion_form_set.save()
+            messages.success(
+                self.request, 'Registros de Clarificación/Filtración guardados')
+
+        return super(ClarificacionFiltracionUpdate, self).form_valid(form)
+
+    def form_invalid(self, form, registro_clarificaion_filtracion_form_set):
+        # def form_invalid(self, form):
+        messages.error(self.request, 'Error al guardar.')
+        # return self.render_to_response(self.get_context_data(form=form))
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            registro_clarificaion_filtracion_form_set=registro_clarificaion_filtracion_form_set))
+
+
 @login_required
 def SeguimientoMaceracionCoccionCreate(request, pk):
     """
@@ -462,5 +521,15 @@ def SeguimientoFermentacionCreate(request, pk):
     Inicializamos planilla de fermentación
     """
     init_planilla_Fermentacion(pk)
+    return HttpResponseRedirect(reverse('lote_seguimientos_list',
+                                        kwargs={'pk': pk}))
+
+
+@login_required
+def SeguimientoClarificacionFiltracionCreate(request, pk):
+    """
+    Inicializamos planilla de Clarificacion Filtracion
+    """
+    init_planilla_Clarificacion_Filtracion(pk)
     return HttpResponseRedirect(reverse('lote_seguimientos_list',
                                         kwargs={'pk': pk}))

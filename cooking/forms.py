@@ -413,3 +413,58 @@ RegistroFermentacionFormset = inlineformset_factory(SeguimientoFermentacion, Reg
                                                             'pH', 'observaciones'],
                                                     extra=1,
                                                     can_delete=False)
+
+
+# PLANILLA CONTROL DE CLARIFICACION / FILTRACION
+
+
+class SeguimientoClarificacionFiltracionModelForm(forms.ModelForm):
+
+    class Meta:
+        model = SeguimientoClarificacionFiltracion
+        fields = ['placa_tipo', 'placa_cantidad']
+
+    def __init__(self, *args, **kwargs):
+        super(SeguimientoClarificacionFiltracionModelForm,
+              self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class RegistroClarificacionFiltracionModelForm(forms.ModelForm):
+    orden = forms.CharField(disabled=True)
+
+    class Meta:
+        model = RegistroClarificacionFiltracion
+        fields = ['orden', 'origen',
+                  'destino_barril', 'hora_inicio', 'kg_fin', 'presion_filtro',
+                  'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        super(RegistroClarificacionFiltracionModelForm,
+              self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+            if field == 'observaciones':
+                self.fields[field].widget.attrs.update({
+                    'cols': 10,
+                    'rows': 2
+                })
+
+
+RegistroClarificacionFiltracionFormset = inlineformset_factory(
+    SeguimientoClarificacionFiltracion,
+    RegistroClarificacionFiltracion,
+    form=RegistroClarificacionFiltracionModelForm,
+    fields=['orden', 'origen',
+            'destino_barril',
+            'hora_inicio',
+            'kg_fin',
+            'presion_filtro',
+            'observaciones'],
+    extra=0,
+    can_delete=False)

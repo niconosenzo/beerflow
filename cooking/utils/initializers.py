@@ -98,3 +98,18 @@ def init_planilla_Fermentacion(pk):
         seguimiento_control_fermentacion=seguimiento_fermentacion)
     registro_fermentacion.save()
     pass
+
+
+def init_planilla_Clarificacion_Filtracion(pk):
+    # seguimiento clarificacion filtracion
+    seguimiento_clarificacion_filtracion = SeguimientoClarificacionFiltracion(
+        lote=Lote.objects.get(lote_nro=pk))
+    seguimiento_clarificacion_filtracion.save()
+
+    # registro clarificacion filtracion
+    for orden in range(1, 11):
+        registro_clarificacion = RegistroClarificacionFiltracion(
+            seguimiento_control_clarificacion_filtracion=seguimiento_clarificacion_filtracion,
+            orden=orden)
+        registro_clarificacion.save()
+    pass

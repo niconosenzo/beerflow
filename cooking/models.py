@@ -315,7 +315,7 @@ class RegistroFermentacion(models.Model):
 
 # PLANILLA CONTROL DE CLARIFICACION / FILTRACION
 
-class SeguimientoClarificacionFiltracion(models.Model):
+class SeguimientoClarificacionFiltracion(CreationModificationDateMixin):
     """
     Proceso de control de Clarificación/Filtración,
     se distingue todo el proceso por un ID unico, el lote_nro
@@ -326,7 +326,6 @@ class SeguimientoClarificacionFiltracion(models.Model):
 
     lote = models.OneToOneField(
         Lote, on_delete=models.CASCADE, primary_key=True)
-    fecha = models.DateField(null=True, blank=True)
     placa_tipo = models.CharField(max_length=10, null=True, blank=True)
     placa_cantidad = models.PositiveIntegerField(null=True, blank=True)
 
@@ -337,15 +336,18 @@ class SeguimientoClarificacionFiltracion(models.Model):
 class RegistroClarificacionFiltracion(models.Model):
 
     class Meta:
+        ordering = ["orden"]
         verbose_name = "Registro Clarificación y Filtración"
         verbose_name_plural = "Registros de Clarificación y Filtración"
 
     seguimiento_control_clarificacion_filtracion = models.ForeignKey(
-        'SeguimientoClarificacionFiltracion', on_delete=models.CASCADE, null=True)
-    orden = models.PositiveIntegerField(null=True, blank=True)
+        'SeguimientoClarificacionFiltracion',
+        on_delete=models.CASCADE, null=True)
+    orden = models.PositiveIntegerField()
     origen = models.CharField(max_length=20, null=True, blank=True)
     # WIP, Debe ser cambiado a FK a clase barril
-    destino_barril = models.CharField(max_length=10, null=True, blank=True)
+    destino_barril = models.ForeignKey('Barril',
+                                       on_delete=models.CASCADE, null=True)
     hora_inicio = models.TimeField(
         choices=constants.HORA, null=True, blank=True)
     kg_fin = models.FloatField(null=True, blank=True)
@@ -356,13 +358,12 @@ class RegistroClarificacionFiltracion(models.Model):
 
 # PLANILLA CONTROL DE CARBONATACION
 
-class SeguimientoCarbonatacion(models.Model):
+class SeguimientoCarbonatacion(CreationModificationDateMixin):
     """
     Tercer seguimiento de la elaboración,
     se distingue todo el suiemiento por un ID único, el lote_nro
     """
-    fecha_inicio = models.DateField(
-        help_text="Fecha inicio del proceso de carbonatación, campo requerido")
+
     fecha_fin = models.DateField(null=True, blank=True)
     lote = models.OneToOneField(
         Lote, on_delete=models.CASCADE, primary_key=True)

@@ -33,6 +33,14 @@
                {% endfor %}
            </tr>
           {% endif %}
+          {% if  seguimiento_clarificacion_filtracion %}
+            <tr>
+                {% for innerseguimiento in seguimiento_clarificacion_filtracion %}
+                    <td > <a href = "{% url 'clarificacion_filtracion_list' innerseguimiento.lote.lote_nro %}"> {{ innerseguimiento }}</td>
+                    <td>{{ innerseguimiento.fecha_creacion }} </td>
+                {% endfor %}
+            </tr>
+           {% endif %}
 
         </tbody>
       </table>
@@ -54,7 +62,7 @@
 
     {% if not seguimiento_clarificacion_filtracion %}
     <div class="col-sm-6 col-sm-offset-3">
-        <a href="#">- Crear Planilla Clarificación / Filtración </a>
+        <a href="{% url 'clarificacion_filtracion_create' lote.lote_nro %}">- Crear Planilla Clarificación / Filtración </a>
     </div>
     {% endif %}
 
